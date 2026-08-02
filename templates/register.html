@@ -1,68 +1,195 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create Account — CyberShield AI</title>
 
-<title>Register</title>
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- Shared landing page styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+<!-- Auth page styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
 </head>
-
 <body>
 
-<h1>Create Account</h1>
+<!-- Background grid layer (shared with landing page) -->
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
 
-<form method="POST">
+<main class="cs-auth-page">
+  <div class="container">
+    <a href="/" class="cs-auth-brand">
+      <span class="cs-brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+      CyberShield <span class="cs-brand-accent">AI</span>
+    </a>
 
-{{ form.hidden_tag() }}
+    <div class="cs-auth-shell">
 
-<p>
+      <!-- Left: brand / visual panel (hidden on small screens) -->
+      <div class="cs-auth-side d-none d-lg-flex">
+        <div class="cs-auth-side-inner">
+          <div class="cs-eyebrow"><span class="cs-dot"></span> AI SECURITY ENGINE: ACTIVE</div>
+          <h2>Join CyberShield AI</h2>
+          <p>Create an account to run AI-powered vulnerability assessments, track scan history, and download professional security reports.</p>
 
-{{ form.full_name.label }}
+          <ul class="cs-auth-perks">
+            <li><i class="fa-solid fa-circle-check"></i> Full website vulnerability scans</li>
+            <li><i class="fa-solid fa-circle-check"></i> AI-generated remediation guidance</li>
+            <li><i class="fa-solid fa-circle-check"></i> Downloadable PDF security reports</li>
+          </ul>
 
-<br>
+          <div class="cs-radar-panel cs-float cs-auth-radar">
+            <div class="cs-radar-header">
+              <span class="cs-radar-title"><i class="fa-solid fa-satellite-dish me-2"></i>Threat Radar</span>
+              <span class="cs-radar-status">SCANNING</span>
+            </div>
+            <div class="cs-radar-wrap">
+              <div class="cs-radar">
+                <div class="cs-radar-ring r1"></div>
+                <div class="cs-radar-ring r2"></div>
+                <div class="cs-radar-ring r3"></div>
+                <div class="cs-radar-sweep"></div>
+                <div class="cs-blip b1"></div>
+                <div class="cs-blip b2"></div>
+                <div class="cs-blip b3"></div>
+                <div class="cs-blip b4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-{{ form.full_name(size=40) }}
+      <!-- Right: register form card -->
+      <div class="cs-auth-card">
+        <div class="cs-auth-head">
+          <span class="cs-tag">GET STARTED</span>
+          <h1>Create Your Account</h1>
+          <p>Start running AI-powered security assessments in minutes.</p>
+        </div>
 
-</p>
+        <form method="POST" novalidate class="cs-auth-form">
+          {{ form.hidden_tag() }}
 
-<p>
+          <div class="cs-field">
+            <label for="full_name">Full Name</label>
+            <div class="cs-input-wrap">
+              <i class="fa-solid fa-user"></i>
+              {{ form.full_name }}
+            </div>
+          </div>
 
-{{ form.email.label }}
+          <div class="cs-field">
+            <label for="email">Email Address</label>
+            <div class="cs-input-wrap">
+              <i class="fa-solid fa-envelope"></i>
+              {{ form.email }}
+            </div>
+          </div>
 
-<br>
+          <div class="cs-field">
+            <label for="password">Password</label>
+            <div class="cs-input-wrap" data-field="password">
+              <i class="fa-solid fa-lock"></i>
+              {{ form.password }}
+              <button type="button" class="cs-pass-toggle" aria-label="Show password">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+            <div class="cs-strength-meter">
+              <div class="cs-strength-track"><span class="cs-strength-bar"></span></div>
+              <span class="cs-strength-label">Password strength</span>
+            </div>
+          </div>
 
-{{ form.email(size=40) }}
+          <div class="cs-field">
+            <label for="confirm_password">Confirm Password</label>
+            <div class="cs-input-wrap" data-field="confirm_password">
+              <i class="fa-solid fa-lock"></i>
+              {{ form.confirm_password }}
+              <button type="button" class="cs-pass-toggle" aria-label="Show password">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
 
-</p>
+          <div class="cs-submit-wrap">
+            {{ form.submit }}
+          </div>
+        </form>
 
-<p>
+        <p class="cs-auth-switch">Already have an account? <a href="/login">Login</a></p>
+      </div>
 
-{{ form.password.label }}
+    </div>
+  </div>
+</main>
 
-<br>
+<script>
+  // ---- Show / Hide password toggles ----
+  document.querySelectorAll('.cs-pass-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var wrap = btn.closest('.cs-input-wrap');
+      var input = wrap.querySelector('input');
+      var icon = btn.querySelector('i');
+      if (!input) return;
+      var showing = input.getAttribute('type') === 'text';
+      input.setAttribute('type', showing ? 'password' : 'text');
+      icon.classList.toggle('fa-eye', showing);
+      icon.classList.toggle('fa-eye-slash', !showing);
+      btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+    });
+  });
 
-{{ form.password(size=40) }}
+  // ---- Password strength indicator ----
+  var passWrap = document.querySelector('.cs-input-wrap[data-field="password"]');
+  var passInput = passWrap ? passWrap.querySelector('input') : null;
+  var strengthBar = document.querySelector('.cs-strength-bar');
+  var strengthLabel = document.querySelector('.cs-strength-label');
 
-</p>
+  function scorePassword(value) {
+    var score = 0;
+    if (!value) return 0;
+    if (value.length >= 8) score++;
+    if (value.length >= 12) score++;
+    if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
+    if (/\d/.test(value)) score++;
+    if (/[^A-Za-z0-9]/.test(value)) score++;
+    return Math.min(score, 4);
+  }
 
-<p>
+  var levels = [
+    { label: 'Password strength', width: '0%', color: 'var(--cs-glass-border)' },
+    { label: 'Weak',   width: '25%',  color: '#FF5C7A' },
+    { label: 'Fair',   width: '50%',  color: '#FFB020' },
+    { label: 'Good',   width: '75%',  color: '#22D3EE' },
+    { label: 'Strong', width: '100%', color: '#2ECC71' }
+  ];
 
-{{ form.confirm_password.label }}
+  if (passInput && strengthBar && strengthLabel) {
+    passInput.addEventListener('input', function () {
+      var level = levels[scorePassword(passInput.value)];
+      strengthBar.style.width = level.width;
+      strengthBar.style.background = level.color;
+      strengthLabel.textContent = level.label;
+    });
+  }
+</script>
 
-<br>
-
-{{ form.confirm_password(size=40) }}
-
-</p>
-
-<p>
-
-{{ form.submit() }}
-
-</p>
-
-</form>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
-
 </html>

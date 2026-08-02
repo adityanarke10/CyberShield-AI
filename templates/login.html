@@ -1,9 +1,157 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — CyberShield AI</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- Shared landing page styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+
+<!-- Auth page styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
 </head>
 <body>
-    <h1>Login Page</h1>
+
+<!-- Background grid layer (shared with landing page) -->
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<main class="cs-auth-page">
+  <div class="container">
+    <a href="/" class="cs-auth-brand">
+      <span class="cs-brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+      CyberShield <span class="cs-brand-accent">AI</span>
+    </a>
+
+    <div class="cs-auth-shell">
+
+      <!-- Left: brand / visual panel (unchanged from Register) -->
+      <div class="cs-auth-side d-none d-lg-flex">
+        <div class="cs-auth-side-inner">
+          <div class="cs-eyebrow"><span class="cs-dot"></span> AI SECURITY ENGINE: ACTIVE</div>
+          <h2>Join CyberShield AI</h2>
+          <p>Create an account to run AI-powered vulnerability assessments, track scan history, and download professional security reports.</p>
+
+          <ul class="cs-auth-perks">
+            <li><i class="fa-solid fa-circle-check"></i> Full website vulnerability scans</li>
+            <li><i class="fa-solid fa-circle-check"></i> AI-generated remediation guidance</li>
+            <li><i class="fa-solid fa-circle-check"></i> Downloadable PDF security reports</li>
+          </ul>
+
+          <div class="cs-radar-panel cs-float cs-auth-radar">
+            <div class="cs-radar-header">
+              <span class="cs-radar-title"><i class="fa-solid fa-satellite-dish me-2"></i>Threat Radar</span>
+              <span class="cs-radar-status">SCANNING</span>
+            </div>
+            <div class="cs-radar-wrap">
+              <div class="cs-radar">
+                <div class="cs-radar-ring r1"></div>
+                <div class="cs-radar-ring r2"></div>
+                <div class="cs-radar-ring r3"></div>
+                <div class="cs-radar-sweep"></div>
+                <div class="cs-blip b1"></div>
+                <div class="cs-blip b2"></div>
+                <div class="cs-blip b3"></div>
+                <div class="cs-blip b4"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right: login form card -->
+      <div class="cs-auth-card">
+        <div class="cs-auth-head">
+          <span class="cs-tag">GET STARTED</span>
+          <h1>Welcome Back</h1>
+          <p>Log in to continue your security assessments.</p>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="POST" class="cs-auth-form" novalidate>
+          {{ form.hidden_tag() }}
+
+          <div class="cs-field">
+            <label for="email">Email Address</label>
+            <div class="cs-input-wrap">
+              <i class="fa-solid fa-envelope"></i>
+              {{ form.email }}
+            </div>
+          </div>
+
+          <div class="cs-field">
+            <label for="password">Password</label>
+            <div class="cs-input-wrap" data-field="password">
+              <i class="fa-solid fa-lock"></i>
+              {{ form.password }}
+              <button type="button" class="cs-pass-toggle" aria-label="Show password">
+                <i class="fa-solid fa-eye"></i>
+              </button>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="form-check">
+              {{ form.remember }}
+              <label class="form-check-label" for="remember">Remember Me</label>
+            </div>
+            <p class="cs-auth-switch mb-0"><a href="#">Forgot Password?</a></p>
+          </div>
+
+          <div class="cs-submit-wrap">
+            {{ form.submit }}
+          </div>
+        </form>
+
+        <p class="cs-auth-switch">Don't have an account? <a href="{{ url_for('auth.register') }}">Register</a></p>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+  // ---- Show / Hide password toggle ----
+  document.querySelectorAll('.cs-pass-toggle').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var wrap = btn.closest('.cs-input-wrap');
+      var input = wrap.querySelector('input');
+      var icon = btn.querySelector('i');
+      if (!input) return;
+      var showing = input.getAttribute('type') === 'text';
+      input.setAttribute('type', showing ? 'password' : 'text');
+      icon.classList.toggle('fa-eye', showing);
+      icon.classList.toggle('fa-eye-slash', !showing);
+      btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+    });
+  });
+</script>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
