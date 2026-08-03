@@ -1,0 +1,672 @@
+/* =====================================================
+   CYBERSHIELD AI — DASHBOARD STYLESHEET
+   Dark Cybersecurity Theme | Glassmorphism | Bootstrap 5
+   ===================================================== */
+
+/* -----------------------------------------------------
+   1. ROOT VARIABLES
+----------------------------------------------------- */
+:root {
+    --cs-bg-primary: #05070d;
+    --cs-bg-secondary: #0a0e17;
+    --cs-bg-tertiary: #0d1220;
+
+    --cs-cyan: #00e5ff;
+    --cs-cyan-soft: rgba(0, 229, 255, 0.12);
+    --cs-cyan-glow: rgba(0, 229, 255, 0.35);
+
+    --cs-blue: #2979ff;
+    --cs-blue-soft: rgba(41, 121, 255, 0.12);
+
+    --cs-success: #00e676;
+    --cs-success-soft: rgba(0, 230, 118, 0.12);
+
+    --cs-danger: #ff3860;
+    --cs-danger-soft: rgba(255, 56, 96, 0.12);
+
+    --cs-warning: #ffb300;
+    --cs-warning-soft: rgba(255, 179, 0, 0.12);
+
+    --cs-text-primary: #e6f1f5;
+    --cs-text-muted: #8b9bb0;
+    --cs-text-faint: #5c6a80;
+
+    --cs-border: rgba(0, 229, 255, 0.14);
+    --cs-border-soft: rgba(255, 255, 255, 0.06);
+
+    --cs-glass-bg: rgba(13, 18, 32, 0.55);
+    --cs-glass-bg-strong: rgba(13, 18, 32, 0.75);
+    --cs-glass-blur: 16px;
+
+    --cs-radius-lg: 20px;
+    --cs-radius-md: 14px;
+    --cs-radius-sm: 10px;
+
+    --cs-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --cs-font: 'Poppins', 'Segoe UI', system-ui, sans-serif;
+}
+
+/* -----------------------------------------------------
+   2. BASE / BODY
+----------------------------------------------------- */
+body {
+    background: radial-gradient(circle at 15% 0%, #0b1526 0%, var(--cs-bg-primary) 45%),
+                radial-gradient(circle at 85% 100%, #061224 0%, var(--cs-bg-primary) 50%),
+                var(--cs-bg-primary);
+    background-attachment: fixed;
+    color: var(--cs-text-primary);
+    font-family: var(--cs-font);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 229, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 229, 255, 0.035) 1px, transparent 1px);
+    background-size: 42px 42px;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+}
+
+.text-cyan {
+    color: var(--cs-cyan) !important;
+}
+
+.text-muted {
+    color: var(--cs-text-muted) !important;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* -----------------------------------------------------
+   3. NAVBAR
+----------------------------------------------------- */
+.cyber-navbar {
+    background: rgba(6, 10, 20, 0.75);
+    backdrop-filter: blur(var(--cs-glass-blur));
+    -webkit-backdrop-filter: blur(var(--cs-glass-blur));
+    border-bottom: 1px solid var(--cs-border);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+    z-index: 1030;
+}
+
+.cyber-navbar .navbar-brand {
+    color: var(--cs-text-primary);
+    letter-spacing: 0.5px;
+}
+
+.cyber-navbar .navbar-brand i {
+    filter: drop-shadow(0 0 8px var(--cs-cyan-glow));
+}
+
+.cyber-navbar .nav-link {
+    color: var(--cs-text-muted);
+    font-weight: 500;
+    font-size: 0.94rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--cs-radius-sm);
+    transition: var(--cs-transition);
+    position: relative;
+}
+
+.cyber-navbar .nav-link:hover {
+    color: var(--cs-cyan);
+    background: var(--cs-cyan-soft);
+}
+
+.cyber-navbar .nav-link.active {
+    color: var(--cs-cyan);
+    background: var(--cs-cyan-soft);
+    box-shadow: inset 0 0 0 1px var(--cs-border);
+}
+
+.cyber-navbar .navbar-toggler {
+    border: 1px solid var(--cs-border);
+    background: var(--cs-glass-bg);
+}
+
+.cyber-navbar .navbar-toggler:focus {
+    box-shadow: 0 0 0 3px var(--cs-cyan-soft);
+}
+
+/* -----------------------------------------------------
+   4. BUTTONS
+----------------------------------------------------- */
+.btn-cyan {
+    background: linear-gradient(135deg, var(--cs-cyan) 0%, var(--cs-blue) 100%);
+    color: #011019;
+    border: none;
+    font-weight: 600;
+    border-radius: var(--cs-radius-sm);
+    transition: var(--cs-transition);
+}
+
+.btn-cyan:hover,
+.btn-cyan:focus {
+    color: #011019;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px var(--cs-cyan-glow);
+    filter: brightness(1.08);
+}
+
+.btn-outline-cyan {
+    background: transparent;
+    color: var(--cs-cyan);
+    border: 1px solid var(--cs-border);
+    font-weight: 500;
+    border-radius: var(--cs-radius-sm);
+    transition: var(--cs-transition);
+}
+
+.btn-outline-cyan:hover,
+.btn-outline-cyan:focus {
+    background: var(--cs-cyan-soft);
+    color: var(--cs-cyan);
+    border-color: var(--cs-cyan);
+    box-shadow: 0 0 16px var(--cs-cyan-glow);
+    transform: translateY(-1px);
+}
+
+.shadow-glow {
+    box-shadow: 0 0 30px var(--cs-cyan-glow);
+}
+
+.shadow-glow:hover {
+    box-shadow: 0 0 45px var(--cs-cyan-glow);
+}
+
+/* -----------------------------------------------------
+   5. DASHBOARD WRAPPER
+----------------------------------------------------- */
+.dashboard-wrapper {
+    position: relative;
+    z-index: 1;
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+/* -----------------------------------------------------
+   6. GLASS CARD (base component)
+----------------------------------------------------- */
+.glass-card {
+    background: var(--cs-glass-bg);
+    backdrop-filter: blur(var(--cs-glass-blur));
+    -webkit-backdrop-filter: blur(var(--cs-glass-blur));
+    border: 1px solid var(--cs-border-soft);
+    border-radius: var(--cs-radius-lg);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    transition: var(--cs-transition);
+    position: relative;
+    overflow: hidden;
+    animation: cs-fade-up 0.6s ease both;
+}
+
+.glass-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cs-cyan-glow), transparent);
+    opacity: 0.7;
+}
+
+.glass-card:hover {
+    border-color: var(--cs-border);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45), 0 0 0 1px var(--cs-border);
+    transform: translateY(-3px);
+}
+
+/* -----------------------------------------------------
+   7. WELCOME CARD
+----------------------------------------------------- */
+.welcome-card {
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.08) 0%, rgba(13, 18, 32, 0.6) 60%);
+    border: 1px solid var(--cs-border);
+}
+
+.welcome-card h1 {
+    font-size: clamp(1.5rem, 2.5vw, 2.1rem);
+    letter-spacing: -0.5px;
+}
+
+.welcome-card:hover {
+    transform: none;
+}
+
+/* -----------------------------------------------------
+   8. STATISTIC CARDS
+----------------------------------------------------- */
+.stat-card {
+    text-align: left;
+}
+
+.stat-card h2 {
+    font-size: 2rem;
+    letter-spacing: -0.5px;
+}
+
+.stat-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--cs-radius-md);
+    font-size: 1.3rem;
+}
+
+.bg-cyan-soft {
+    background: var(--cs-cyan-soft);
+    color: var(--cs-cyan);
+}
+
+.bg-success-soft {
+    background: var(--cs-success-soft);
+    color: var(--cs-success);
+}
+
+.bg-danger-soft {
+    background: var(--cs-danger-soft);
+    color: var(--cs-danger);
+}
+
+.bg-warning-soft {
+    background: var(--cs-warning-soft);
+    color: var(--cs-warning);
+}
+
+/* -----------------------------------------------------
+   9. QUICK ACTIONS / ACTION CARDS
+----------------------------------------------------- */
+.action-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid var(--cs-border-soft);
+    border-radius: var(--cs-radius-md);
+    transition: var(--cs-transition);
+}
+
+.action-card:hover {
+    background: rgba(0, 229, 255, 0.04);
+    border-color: var(--cs-border);
+    transform: translateY(-2px);
+}
+
+.action-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--cs-radius-sm);
+    font-size: 1.05rem;
+}
+
+/* -----------------------------------------------------
+   10. RECENT SCANS TABLE
+----------------------------------------------------- */
+.cyber-table {
+    background: transparent;
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--cs-text-primary);
+}
+
+.cyber-table thead th {
+    color: var(--cs-text-faint);
+    font-size: 0.76rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--cs-border-soft);
+    padding-bottom: 0.75rem;
+}
+
+.cyber-table tbody tr {
+    border-bottom: 1px solid var(--cs-border-soft);
+    transition: var(--cs-transition);
+}
+
+.cyber-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.cyber-table tbody tr:hover {
+    background: rgba(0, 229, 255, 0.035);
+}
+
+.cyber-table td {
+    padding-top: 0.9rem;
+    padding-bottom: 0.9rem;
+    color: var(--cs-text-primary);
+}
+
+/* Risk badges */
+.risk-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.35em 0.75em;
+    border-radius: 999px;
+    letter-spacing: 0.3px;
+}
+
+.risk-low {
+    background: var(--cs-success-soft);
+    color: var(--cs-success);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.risk-medium {
+    background: var(--cs-warning-soft);
+    color: var(--cs-warning);
+    border: 1px solid rgba(255, 179, 0, 0.3);
+}
+
+.risk-high {
+    background: rgba(255, 112, 67, 0.12);
+    color: #ff7043;
+    border: 1px solid rgba(255, 112, 67, 0.3);
+}
+
+.risk-critical {
+    background: var(--cs-danger-soft);
+    color: var(--cs-danger);
+    border: 1px solid rgba(255, 56, 96, 0.35);
+}
+
+/* Status badges */
+.status-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.35em 0.75em;
+    border-radius: 999px;
+}
+
+.status-completed {
+    background: var(--cs-success-soft);
+    color: var(--cs-success);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.status-failed {
+    background: var(--cs-danger-soft);
+    color: var(--cs-danger);
+    border: 1px solid rgba(255, 56, 96, 0.35);
+}
+
+.status-pending {
+    background: var(--cs-warning-soft);
+    color: var(--cs-warning);
+    border: 1px solid rgba(255, 179, 0, 0.3);
+}
+
+/* -----------------------------------------------------
+   11. SECURITY SCORE RING
+----------------------------------------------------- */
+.score-ring {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+        radial-gradient(circle, var(--cs-bg-secondary) 62%, transparent 63%),
+        conic-gradient(var(--cs-cyan) 0deg 316.8deg, rgba(255, 255, 255, 0.08) 316.8deg 360deg);
+    box-shadow: 0 0 30px var(--cs-cyan-glow), inset 0 0 20px rgba(0, 0, 0, 0.4);
+    position: relative;
+    animation: cs-pulse-ring 3.5s ease-in-out infinite;
+}
+
+.score-ring span {
+    text-shadow: 0 0 18px var(--cs-cyan-glow);
+}
+
+/* -----------------------------------------------------
+   12. AI ENGINE CARD
+----------------------------------------------------- */
+.ai-engine-card .action-icon {
+    background: var(--cs-cyan-soft);
+    color: var(--cs-cyan);
+}
+
+/* -----------------------------------------------------
+   13. LATEST ACTIVITY LIST
+----------------------------------------------------- */
+.activity-list {
+    margin: 0;
+    padding: 0;
+}
+
+.activity-item {
+    position: relative;
+    padding-left: 0.25rem;
+}
+
+.activity-item:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 18px;
+    bottom: -12px;
+    width: 1px;
+    background: var(--cs-border-soft);
+}
+
+.activity-dot {
+    width: 11px;
+    height: 11px;
+    min-width: 11px;
+    border-radius: 50%;
+    margin-top: 4px;
+    box-shadow: 0 0 10px currentColor;
+}
+
+.activity-dot.bg-cyan {
+    background: var(--cs-cyan);
+    color: var(--cs-cyan);
+}
+
+.activity-dot.bg-danger {
+    background: var(--cs-danger);
+    color: var(--cs-danger);
+}
+
+.activity-dot.bg-success {
+    background: var(--cs-success);
+    color: var(--cs-success);
+}
+
+.activity-dot.bg-warning {
+    background: var(--cs-warning);
+    color: var(--cs-warning);
+}
+
+/* -----------------------------------------------------
+   14. FOOTER
+----------------------------------------------------- */
+.cyber-footer {
+    border-top: 1px solid var(--cs-border-soft);
+    background: rgba(6, 10, 20, 0.6);
+    backdrop-filter: blur(var(--cs-glass-blur));
+    -webkit-backdrop-filter: blur(var(--cs-glass-blur));
+    position: relative;
+    z-index: 1;
+}
+
+.cyber-footer i {
+    filter: drop-shadow(0 0 6px var(--cs-cyan-glow));
+}
+
+/* -----------------------------------------------------
+   15. SCROLLBAR
+----------------------------------------------------- */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--cs-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(0, 229, 255, 0.25);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 229, 255, 0.45);
+}
+
+/* -----------------------------------------------------
+   16. ANIMATIONS
+----------------------------------------------------- */
+@keyframes cs-fade-up {
+    from {
+        opacity: 0;
+        transform: translateY(14px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes cs-pulse-ring {
+    0%, 100% {
+        box-shadow: 0 0 30px var(--cs-cyan-glow), inset 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 45px var(--cs-cyan-glow), inset 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+}
+
+@keyframes cs-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.status-completed i,
+.status-failed i {
+    animation: cs-blink 2.5s ease-in-out infinite;
+}
+
+/* Stagger card entrance */
+.row.g-4 > [class^="col-"]:nth-child(1) .glass-card { animation-delay: 0.02s; }
+.row.g-4 > [class^="col-"]:nth-child(2) .glass-card { animation-delay: 0.08s; }
+.row.g-4 > [class^="col-"]:nth-child(3) .glass-card { animation-delay: 0.14s; }
+.row.g-4 > [class^="col-"]:nth-child(4) .glass-card { animation-delay: 0.20s; }
+
+/* -----------------------------------------------------
+   17. RESPONSIVE BREAKPOINTS
+----------------------------------------------------- */
+@media (max-width: 991.98px) {
+    .dashboard-wrapper {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .welcome-card {
+        text-align: left;
+    }
+
+    .welcome-card .text-lg-end {
+        text-align: left !important;
+    }
+
+    .score-ring {
+        width: 120px;
+        height: 120px;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .glass-card {
+        border-radius: var(--cs-radius-md);
+    }
+
+    .stat-card h2 {
+        font-size: 1.6rem;
+    }
+
+    .stat-icon {
+        width: 44px;
+        height: 44px;
+        font-size: 1.1rem;
+    }
+
+    .cyber-table {
+        font-size: 0.85rem;
+    }
+
+    .cyber-table thead {
+        display: none;
+    }
+
+    .cyber-table tbody tr {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        padding: 0.75rem 0;
+    }
+
+    .cyber-table td {
+        padding: 0.15rem 0;
+    }
+
+    .score-ring {
+        width: 110px;
+        height: 110px;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .welcome-card h1 {
+        font-size: 1.35rem;
+    }
+
+    .btn-cyan.btn-lg {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .stat-card,
+    .action-card {
+        text-align: left;
+    }
+}
+
+/* -----------------------------------------------------
+   18. UTILITY OVERRIDES
+----------------------------------------------------- */
+.dropdown-menu {
+    background: var(--cs-glass-bg-strong);
+    backdrop-filter: blur(var(--cs-glass-blur));
+    border: 1px solid var(--cs-border);
+}
+
+.dropdown-item {
+    color: var(--cs-text-muted);
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: var(--cs-cyan-soft);
+    color: var(--cs-cyan);
+}
+
+::selection {
+    background: var(--cs-cyan-soft);
+    color: var(--cs-cyan);
+}
