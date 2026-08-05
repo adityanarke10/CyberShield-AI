@@ -22,9 +22,7 @@
 <div class="container py-5">
 
     <h1 class="text-center text-info mb-4">
-
         🌐 CyberShield AI - Website Scanner
-
     </h1>
 
     <div class="card shadow border-info">
@@ -36,23 +34,21 @@
                 <div class="mb-3">
 
                     <label class="form-label">
-
                         Website URL
-
                     </label>
 
                     <input
-                            type="text"
-                            class="form-control"
-                            name="url"
-                            placeholder="https://example.com"
-                            required>
+                        type="text"
+                        class="form-control"
+                        name="url"
+                        placeholder="https://example.com"
+                        required>
 
                 </div>
 
                 <button
-                        class="btn btn-info"
-                        type="submit">
+                    class="btn btn-info"
+                    type="submit">
 
                     Scan Website
 
@@ -83,9 +79,7 @@
                 <div class="card-header bg-info text-dark">
 
                     <h4 class="mb-0">
-
                         Website Information
-
                     </h4>
 
                 </div>
@@ -95,59 +89,38 @@
                     <table class="table table-bordered">
 
                         <tr>
-
                             <th>Website</th>
-
                             <td>{{ result.url }}</td>
-
                         </tr>
 
                         <tr>
-
                             <th>Status Code</th>
-
                             <td>{{ result.status_code }}</td>
-
                         </tr>
 
                         <tr>
-
                             <th>Response Time</th>
-
                             <td>{{ result.response_time }} ms</td>
-
                         </tr>
 
                         <tr>
-
                             <th>IP Address</th>
-
                             <td>{{ result.ip_address }}</td>
-
                         </tr>
 
                         <tr>
-
                             <th>Server</th>
-
                             <td>{{ result.server }}</td>
-
                         </tr>
 
                         <tr>
-
                             <th>Content Type</th>
-
                             <td>{{ result.content_type }}</td>
-
                         </tr>
 
                         <tr>
-
                             <th>Protocol</th>
-
                             <td>{{ result.https }}</td>
-
                         </tr>
 
                     </table>
@@ -165,9 +138,7 @@
                 <div class="card-header bg-dark text-white">
 
                     <h4 class="mb-0">
-
                         Security Headers
-
                     </h4>
 
                 </div>
@@ -201,17 +172,13 @@
                                     {% if value == "Missing" %}
 
                                         <span class="badge bg-danger">
-
                                             Missing
-
                                         </span>
 
                                     {% else %}
 
                                         <span class="badge bg-success">
-
                                             Present
-
                                         </span>
 
                                     {% endif %}
@@ -223,6 +190,80 @@
                         {% endfor %}
 
                         </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+            <!-- SSL Certificate -->
+
+            {% if ssl_info %}
+
+            <div class="card mt-4 shadow">
+
+                <div class="card-header bg-primary text-white">
+
+                    <h4 class="mb-0">
+                        SSL Certificate
+                    </h4>
+
+                </div>
+
+                <div class="card-body">
+
+                    <table class="table table-bordered">
+
+                        <tr>
+                            <th>Issued To</th>
+                            <td>{{ ssl_info.issued_to }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Issuer</th>
+                            <td>{{ ssl_info.issuer }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Expires</th>
+                            <td>{{ ssl_info.expires }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Days Remaining</th>
+                            <td>{{ ssl_info.days_left }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>TLS Version</th>
+                            <td>{{ ssl_info.version }}</td>
+                        </tr>
+
+                        <tr>
+                            <th>Status</th>
+
+                            <td>
+
+                                {% if ssl_info.status == "Valid" %}
+
+                                    <span class="badge bg-success">
+                                        Valid
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="badge bg-danger">
+                                        Expired
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
 
                     </table>
 
