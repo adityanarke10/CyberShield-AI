@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 from flask_login import LoginManager
-from flask_bcrypt import Bcrypt
+from extensions import bcrypt
 
 from config import Config
 from models import db
@@ -17,7 +17,7 @@ app.config.from_object(Config)
 
 db.init_app(app)
 
-bcrypt = Bcrypt(app)
+bcrypt.init_app(app)
 
 login_manager = LoginManager()
 login_manager.init_app(app)
