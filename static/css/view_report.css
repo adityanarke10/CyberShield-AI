@@ -1,0 +1,652 @@
+/* =====================================================
+   CYBERSHIELD AI — VIEW REPORT PAGE STYLESHEET
+   Dark Cybersecurity Theme | Glassmorphism | Bootstrap 5
+   Extends: dashboard.css (all :root variables inherited)
+   ===================================================== */
+
+/* -----------------------------------------------------
+   1. PAGE WRAPPER
+----------------------------------------------------- */
+.vr-wrapper {
+    max-width: 1440px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* -----------------------------------------------------
+   2. PAGE HEADER & BREADCRUMB
+----------------------------------------------------- */
+.vr-page-header {
+    padding-top: 0.5rem;
+}
+
+.vr-breadcrumb {
+    font-size: 0.82rem;
+    color: var(--cs-text-faint);
+}
+
+.vr-breadcrumb a {
+    color: var(--cs-text-muted);
+    text-decoration: none;
+    transition: var(--cs-transition);
+}
+
+.vr-breadcrumb a:hover {
+    color: var(--cs-cyan);
+}
+
+.vr-breadcrumb .text-faint {
+    color: var(--cs-text-faint);
+    font-size: 0.7rem;
+}
+
+.vr-page-header h3 {
+    font-size: clamp(1.2rem, 2.2vw, 1.7rem);
+    letter-spacing: -0.3px;
+}
+
+/* -----------------------------------------------------
+   3. SECTION LABEL (shared utility)
+----------------------------------------------------- */
+.vr-section-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    font-weight: 600;
+    color: var(--cs-text-faint);
+    margin-bottom: 0;
+}
+
+/* -----------------------------------------------------
+   4. SECURITY SCORE CARD
+----------------------------------------------------- */
+.vr-score-card {
+    background: linear-gradient(135deg, rgba(0, 229, 255, 0.07) 0%, var(--cs-glass-bg) 70%);
+    border: 1px solid var(--cs-border);
+}
+
+.vr-score-ring {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* Safe (≥ 80) */
+.vr-ring-safe {
+    background:
+        radial-gradient(circle, var(--cs-bg-secondary) 62%, transparent 63%),
+        conic-gradient(var(--cs-success) 0deg calc(var(--cs-score, 80) * 3.6deg), rgba(255,255,255,0.06) 0deg);
+    box-shadow: 0 0 36px rgba(0, 230, 118, 0.35), inset 0 0 20px rgba(0,0,0,0.4);
+    animation: vr-pulse-safe 3.5s ease-in-out infinite;
+}
+
+/* Warn (50–79) */
+.vr-ring-warn {
+    background:
+        radial-gradient(circle, var(--cs-bg-secondary) 62%, transparent 63%),
+        conic-gradient(var(--cs-warning) 0deg calc(var(--cs-score, 60) * 3.6deg), rgba(255,255,255,0.06) 0deg);
+    box-shadow: 0 0 36px rgba(255, 179, 0, 0.35), inset 0 0 20px rgba(0,0,0,0.4);
+    animation: vr-pulse-warn 3.5s ease-in-out infinite;
+}
+
+/* Danger (< 50) */
+.vr-ring-danger {
+    background:
+        radial-gradient(circle, var(--cs-bg-secondary) 62%, transparent 63%),
+        conic-gradient(var(--cs-danger) 0deg calc(var(--cs-score, 30) * 3.6deg), rgba(255,255,255,0.06) 0deg);
+    box-shadow: 0 0 36px rgba(255, 56, 96, 0.35), inset 0 0 20px rgba(0,0,0,0.4);
+    animation: vr-pulse-danger 3.5s ease-in-out infinite;
+}
+
+.vr-score-num {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.vr-ring-safe  .vr-score-num { color: var(--cs-success); text-shadow: 0 0 18px rgba(0,230,118,0.5); }
+.vr-ring-warn  .vr-score-num { color: var(--cs-warning); text-shadow: 0 0 18px rgba(255,179,0,0.5); }
+.vr-ring-danger .vr-score-num { color: var(--cs-danger);  text-shadow: 0 0 18px rgba(255,56,96,0.5); }
+
+.vr-score-denom {
+    font-size: 0.82rem;
+    color: var(--cs-text-faint);
+}
+
+/* Risk badge (inherits shared risk-badge from dashboard.css) */
+.vr-risk-badge {
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: 999px;
+}
+
+/* -----------------------------------------------------
+   5. QUICK METRICS ROW
+----------------------------------------------------- */
+.vr-metric {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    text-align: center;
+    padding: 0.85rem 0.5rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--cs-border-soft);
+    border-radius: var(--cs-radius-md);
+    transition: var(--cs-transition);
+}
+
+.vr-metric:hover {
+    background: var(--cs-cyan-soft);
+    border-color: var(--cs-border);
+    transform: translateY(-2px);
+}
+
+.vr-metric-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: var(--cs-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+}
+
+.vr-metric-val {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--cs-text-primary);
+    word-break: break-all;
+    text-align: center;
+}
+
+.vr-metric-label {
+    font-size: 0.72rem;
+    color: var(--cs-text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+/* Soft colour tokens shared with scanner.css */
+.bg-blue-soft {
+    background: var(--cs-blue-soft);
+    color: var(--cs-blue);
+}
+
+.bg-warning-soft {
+    background: var(--cs-warning-soft);
+    color: var(--cs-warning);
+}
+
+/* -----------------------------------------------------
+   6. SECTION CARDS (result cards)
+----------------------------------------------------- */
+.vr-section-card {
+    animation: vr-fade-up 0.55s ease both;
+}
+
+.vr-card-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.vr-card-icon {
+    width: 46px;
+    height: 46px;
+    min-width: 46px;
+    border-radius: var(--cs-radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+/* -----------------------------------------------------
+   7. INFO ROWS (website info / ssl fields)
+----------------------------------------------------- */
+.vr-info-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.65rem 0.9rem;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--cs-border-soft);
+    border-radius: var(--cs-radius-sm);
+    transition: var(--cs-transition);
+}
+
+.vr-info-row:hover {
+    border-color: var(--cs-border);
+    background: rgba(0,229,255,0.03);
+}
+
+.vr-info-label {
+    font-size: 0.71rem;
+    color: var(--cs-text-faint);
+    text-transform: uppercase;
+    letter-spacing: 0.45px;
+    font-weight: 600;
+}
+
+.vr-info-value {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--cs-text-primary);
+    word-break: break-all;
+}
+
+/* -----------------------------------------------------
+   8. SSL BANNER
+----------------------------------------------------- */
+.vr-ssl-banner {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 1rem 1.1rem;
+    border-radius: var(--cs-radius-md);
+}
+
+.vr-ssl-ok {
+    background: rgba(0, 230, 118, 0.05);
+    border: 1px solid rgba(0, 230, 118, 0.2);
+}
+
+.vr-ssl-fail {
+    background: rgba(255, 56, 96, 0.05);
+    border: 1px solid rgba(255, 56, 96, 0.2);
+}
+
+.vr-ssl-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.vr-ssl-ok .vr-ssl-icon {
+    background: var(--cs-success-soft);
+    color: var(--cs-success);
+    box-shadow: 0 0 18px rgba(0, 230, 118, 0.3);
+}
+
+.vr-ssl-fail .vr-ssl-icon {
+    background: var(--cs-danger-soft);
+    color: var(--cs-danger);
+    box-shadow: 0 0 18px rgba(255, 56, 96, 0.3);
+}
+
+.vr-ssl-bar {
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.06);
+}
+
+.vr-ssl-progress {
+    background: linear-gradient(90deg, var(--cs-success), #00c853);
+    border-radius: 999px;
+}
+
+/* -----------------------------------------------------
+   9. SECURITY HEADERS ROWS
+----------------------------------------------------- */
+.vr-header-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.7rem 0.9rem;
+    border-radius: var(--cs-radius-sm);
+    border: 1px solid var(--cs-border-soft);
+    font-size: 0.87rem;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    transition: var(--cs-transition);
+}
+
+.vr-header-row:last-child {
+    margin-bottom: 0;
+}
+
+.vr-header-row:hover {
+    border-color: var(--cs-border);
+    transform: translateX(4px);
+}
+
+.vr-header-pass { background: rgba(0, 230, 118, 0.04); }
+.vr-header-fail  { background: rgba(255, 56, 96, 0.04); }
+.vr-header-warn  { background: rgba(255, 179, 0, 0.04); }
+
+.vr-header-status-icon {
+    font-size: 1rem;
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.vr-header-pass .vr-header-status-icon { color: var(--cs-success); }
+.vr-header-fail  .vr-header-status-icon { color: var(--cs-danger); }
+.vr-header-warn  .vr-header-status-icon { color: var(--cs-warning); }
+
+.vr-header-name {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.82rem;
+    color: var(--cs-text-primary);
+    flex: 1;
+}
+
+.vr-header-value {
+    font-size: 0.78rem;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* -----------------------------------------------------
+   10. TECHNOLOGIES CHIP GRID
+----------------------------------------------------- */
+.vr-tech-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.vr-tech-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.9rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--cs-border-soft);
+    border-radius: 999px;
+    font-size: 0.82rem;
+    color: var(--cs-text-muted);
+    font-weight: 500;
+    transition: var(--cs-transition);
+}
+
+.vr-tech-chip:hover {
+    background: var(--cs-cyan-soft);
+    border-color: var(--cs-border);
+    color: var(--cs-text-primary);
+    transform: translateY(-2px);
+}
+
+/* -----------------------------------------------------
+   11. COOKIE TABLE
+----------------------------------------------------- */
+.vr-table {
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--cs-text-primary);
+}
+
+.vr-table thead th {
+    color: var(--cs-text-faint);
+    font-size: 0.73rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--cs-border-soft);
+    padding-bottom: 0.75rem;
+}
+
+.vr-table tbody tr {
+    border-bottom: 1px solid var(--cs-border-soft);
+    transition: var(--cs-transition);
+}
+
+.vr-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.vr-table tbody tr:hover {
+    background: rgba(0,229,255,0.025);
+}
+
+.vr-table td {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    color: var(--cs-text-primary);
+}
+
+.vr-cookie-name {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.83rem;
+    color: var(--cs-cyan);
+    font-weight: 600;
+}
+
+/* Colour helpers for table icons */
+.text-success { color: var(--cs-success) !important; }
+.text-warning { color: var(--cs-warning) !important; }
+.text-danger  { color: var(--cs-danger)  !important; }
+
+/* -----------------------------------------------------
+   12. AI ANALYSIS CARD
+----------------------------------------------------- */
+.vr-ai-block {
+    background: rgba(0, 229, 255, 0.03);
+    border: 1px solid var(--cs-border-soft);
+    border-radius: var(--cs-radius-md);
+    padding: 0.9rem 1rem;
+}
+
+.vr-ai-text {
+    font-size: 0.85rem;
+    color: var(--cs-text-muted);
+    line-height: 1.65;
+    margin-bottom: 0.5rem;
+}
+
+.vr-ai-recs {
+    margin-top: 0.75rem;
+}
+
+.vr-rec-item {
+    font-size: 0.83rem;
+    color: var(--cs-text-muted);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--cs-border-soft);
+    line-height: 1.5;
+}
+
+.vr-rec-item:last-child {
+    border-bottom: none;
+}
+
+.vr-rec-item code {
+    background: var(--cs-cyan-soft);
+    color: var(--cs-cyan);
+    padding: 0.1em 0.45em;
+    border-radius: 4px;
+    font-size: 0.79em;
+}
+
+/* -----------------------------------------------------
+   13. SCORE BREAKDOWN BARS
+----------------------------------------------------- */
+.vr-breakdown-bar {
+    height: 5px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.05);
+}
+
+.vr-breakdown-bar .progress-bar {
+    border-radius: 999px;
+}
+
+.vr-bar-success { background: var(--cs-success); }
+.vr-bar-warning { background: var(--cs-warning); }
+.vr-bar-danger  { background: var(--cs-danger); }
+.vr-bar-cyan    { background: var(--cs-cyan); }
+
+/* -----------------------------------------------------
+   14. SHARED BADGE TOKENS (mirror of dashboard.css)
+      Declared here so view_report.html is self-sufficient
+      even if dashboard.css is not loaded.
+----------------------------------------------------- */
+.risk-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.35em 0.8em;
+    border-radius: 999px;
+}
+
+.risk-low {
+    background: var(--cs-success-soft);
+    color: var(--cs-success);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.risk-medium {
+    background: var(--cs-warning-soft);
+    color: var(--cs-warning);
+    border: 1px solid rgba(255, 179, 0, 0.3);
+}
+
+.risk-high {
+    background: var(--cs-danger-soft);
+    color: var(--cs-danger);
+    border: 1px solid rgba(255, 56, 96, 0.3);
+}
+
+.risk-critical {
+    background: rgba(180, 0, 0, 0.18);
+    color: #ff1744;
+    border: 1px solid rgba(255, 23, 68, 0.4);
+}
+
+.status-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.35em 0.8em;
+    border-radius: 999px;
+}
+
+.status-completed {
+    background: var(--cs-success-soft);
+    color: var(--cs-success);
+    border: 1px solid rgba(0, 230, 118, 0.3);
+}
+
+.status-failed {
+    background: var(--cs-danger-soft);
+    color: var(--cs-danger);
+    border: 1px solid rgba(255, 56, 96, 0.3);
+}
+
+.status-pending {
+    background: var(--cs-warning-soft);
+    color: var(--cs-warning);
+    border: 1px solid rgba(255, 179, 0, 0.3);
+}
+
+/* -----------------------------------------------------
+   15. ANIMATIONS
+----------------------------------------------------- */
+@keyframes vr-fade-up {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes vr-pulse-safe {
+    0%, 100% { box-shadow: 0 0 30px rgba(0,230,118,0.3), inset 0 0 20px rgba(0,0,0,0.4); }
+    50%       { box-shadow: 0 0 52px rgba(0,230,118,0.5), inset 0 0 20px rgba(0,0,0,0.4); }
+}
+
+@keyframes vr-pulse-warn {
+    0%, 100% { box-shadow: 0 0 30px rgba(255,179,0,0.3), inset 0 0 20px rgba(0,0,0,0.4); }
+    50%       { box-shadow: 0 0 52px rgba(255,179,0,0.5), inset 0 0 20px rgba(0,0,0,0.4); }
+}
+
+@keyframes vr-pulse-danger {
+    0%, 100% { box-shadow: 0 0 30px rgba(255,56,96,0.3), inset 0 0 20px rgba(0,0,0,0.4); }
+    50%       { box-shadow: 0 0 52px rgba(255,56,96,0.55), inset 0 0 20px rgba(0,0,0,0.4); }
+}
+
+/* Stagger card entrance */
+.col-lg-8 .vr-section-card:nth-child(1) { animation-delay: 0.04s; }
+.col-lg-8 .vr-section-card:nth-child(2) { animation-delay: 0.10s; }
+.col-lg-8 .vr-section-card:nth-child(3) { animation-delay: 0.16s; }
+.col-lg-8 .vr-section-card:nth-child(4) { animation-delay: 0.22s; }
+.col-lg-8 .vr-section-card:nth-child(5) { animation-delay: 0.28s; }
+.col-lg-4 .vr-section-card:nth-child(1) { animation-delay: 0.06s; }
+.col-lg-4 .vr-section-card:nth-child(2) { animation-delay: 0.14s; }
+.col-lg-4 .vr-section-card:nth-child(3) { animation-delay: 0.22s; }
+
+/* -----------------------------------------------------
+   16. RESPONSIVE
+----------------------------------------------------- */
+@media (max-width: 991.98px) {
+    .vr-page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .vr-score-ring {
+        width: 130px;
+        height: 130px;
+    }
+
+    .vr-score-num {
+        font-size: 2rem;
+    }
+
+    .vr-card-header {
+        flex-wrap: wrap;
+    }
+
+    .vr-card-header .ms-auto {
+        margin-left: 0 !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .vr-header-value {
+        display: none;
+    }
+
+    .vr-ssl-banner {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .vr-metric {
+        padding: 0.6rem 0.3rem;
+    }
+
+    .vr-metric-val {
+        font-size: 0.78rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .vr-page-header h3 {
+        font-size: 1.1rem;
+    }
+
+    .vr-tech-chip {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.7rem;
+    }
+
+    .vr-score-ring {
+        width: 115px;
+        height: 115px;
+    }
+
+    .vr-score-num {
+        font-size: 1.7rem;
+    }
+}

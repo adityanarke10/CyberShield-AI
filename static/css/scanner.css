@@ -1,0 +1,553 @@
+/* ==========================================================================
+   CYBERSHIELD AI — SCANNER.CSS
+   Page-specific styles for scan.html
+   Reuses tokens from styles.css; no duplicate base rules here.
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE HEADER
+   ========================================================================== */
+
+.sc-page-header {
+  padding: 140px 0 40px;
+  text-align: center;
+}
+
+.sc-page-header .cs-eyebrow {
+  justify-content: center;
+  display: inline-flex;
+  margin-bottom: 22px;
+}
+
+.sc-page-header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 2.6rem;
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+
+.sc-page-header p {
+  color: var(--cs-muted);
+  font-size: 1.05rem;
+  font-weight: 300;
+}
+
+/* ==========================================================================
+   SCANNER INPUT CARD
+   ========================================================================== */
+
+.sc-scanner-section { padding: 0 0 40px; }
+
+.sc-scanner-card {
+  background: var(--cs-glass);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 20px;
+  padding: 32px 36px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.sc-scanner-label {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.09em;
+  color: var(--cs-muted);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.sc-input-group {
+  display: flex;
+  align-items: center;
+  background: rgba(4, 8, 15, 0.55);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 12px;
+  padding: 6px 6px 6px 18px;
+  gap: 12px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sc-input-group:focus-within {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.14), 0 0 26px rgba(34, 211, 238, 0.18);
+}
+
+.sc-input-icon { color: var(--cs-cyan); flex-shrink: 0; }
+
+.sc-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  padding: 10px 0;
+}
+
+.sc-input::placeholder { color: var(--cs-muted); }
+
+.sc-scan-btn {
+  white-space: nowrap;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+}
+
+.sc-input-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: 18px;
+}
+
+.sc-tag-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--cs-muted);
+}
+
+.sc-tag-pill i {
+  color: var(--cs-cyan);
+  margin-right: 5px;
+}
+
+/* ==========================================================================
+   SECTION SHARED
+   ========================================================================== */
+
+.sc-section { padding: 40px 0 60px; }
+
+/* ==========================================================================
+   SCAN PROGRESS TRACKER
+   ========================================================================== */
+
+.sc-progress-card {
+  background: var(--cs-glass);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 18px;
+  padding: 28px 36px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.sc-progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sc-progress-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--cs-muted);
+}
+
+.sc-progress-track {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  justify-content: space-between;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.sc-progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  flex: 0 0 auto;
+  min-width: 72px;
+}
+
+.sc-step-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(4, 8, 15, 0.5);
+  border: 1px solid var(--cs-glass-border);
+  color: var(--cs-muted);
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.sc-progress-step.sc-active .sc-step-icon {
+  border-color: var(--cs-cyan);
+  color: var(--cs-cyan);
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.35);
+  animation: sc-step-pulse 1.8s ease-in-out infinite;
+}
+
+.sc-progress-step.sc-done .sc-step-icon {
+  border-color: #2ECC71;
+  color: #2ECC71;
+  background: rgba(46, 204, 113, 0.1);
+  box-shadow: 0 0 14px rgba(46, 204, 113, 0.2);
+}
+
+@keyframes sc-step-pulse {
+  0%, 100% { box-shadow: 0 0 18px rgba(34, 211, 238, 0.35); }
+  50% { box-shadow: 0 0 30px rgba(34, 211, 238, 0.6); }
+}
+
+.sc-progress-step span {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--cs-muted);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.sc-progress-step.sc-done span { color: #2ECC71; }
+.sc-progress-step.sc-active span { color: var(--cs-cyan); }
+
+.sc-progress-connector {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(34,211,238,0.25), rgba(124,92,255,0.25));
+  min-width: 20px;
+  position: relative;
+  top: -14px;
+}
+
+/* ==========================================================================
+   RISK SCORE BANNER
+   ========================================================================== */
+
+.sc-risk-banner {
+  background: var(--cs-glass);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 18px;
+  padding: 28px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  flex-wrap: wrap;
+}
+
+.sc-risk-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--cs-muted);
+  line-height: 1;
+  margin: 8px 0 6px;
+}
+
+.sc-risk-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--cs-muted);
+}
+
+.sc-risk-right { flex-shrink: 0; }
+
+/* ==========================================================================
+   RESULT CARDS
+   ========================================================================== */
+
+.sc-result-card {
+  background: var(--cs-glass);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 18px;
+  overflow: hidden;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  height: 100%;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.sc-result-card:hover {
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 32px rgba(34, 211, 238, 0.1);
+}
+
+.sc-result-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 22px 24px;
+  border-bottom: 1px solid var(--cs-glass-border);
+  background: rgba(4, 8, 15, 0.3);
+}
+
+.sc-result-card-header .cs-feature-icon {
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.sc-result-card-header .cs-tag {
+  margin-bottom: 4px;
+}
+
+.sc-result-card-header h3 {
+  font-size: 1.05rem;
+  margin: 0;
+  color: #fff;
+  font-weight: 600;
+}
+
+.sc-result-body {
+  padding: 4px 24px;
+}
+
+/* Placeholder state */
+.sc-placeholder {
+  color: var(--cs-muted) !important;
+  opacity: 0.5;
+}
+
+/* Port grid pills */
+.sc-port-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 16px 24px 20px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.07);
+}
+
+.sc-port-pill {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.76rem;
+  padding: 5px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(34, 211, 238, 0.3);
+  color: var(--cs-cyan);
+  background: rgba(34, 211, 238, 0.07);
+}
+
+.sc-placeholder-grid .sc-port-pill {
+  color: var(--cs-muted);
+  border-color: var(--cs-glass-border);
+  background: transparent;
+  opacity: 0.5;
+}
+
+/* ==========================================================================
+   AI ANALYSIS CARD
+   ========================================================================== */
+
+.sc-ai-card {
+  border-color: rgba(124, 92, 255, 0.25);
+}
+
+.sc-ai-card:hover {
+  border-color: rgba(124, 92, 255, 0.4);
+  box-shadow: 0 0 40px rgba(124, 92, 255, 0.14);
+}
+
+.sc-ai-card .sc-result-card-header {
+  background: linear-gradient(90deg, rgba(124,92,255,0.12), rgba(34,211,238,0.06));
+  border-bottom-color: rgba(124, 92, 255, 0.2);
+}
+
+.sc-ai-card .cs-feature-icon {
+  background: linear-gradient(135deg, rgba(124,92,255,0.25), rgba(34,211,238,0.15));
+  border-color: rgba(124, 92, 255, 0.3);
+  color: var(--cs-violet);
+}
+
+.sc-ai-body {
+  padding: 36px 24px;
+}
+
+.sc-ai-placeholder {
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.sc-ai-icon {
+  font-size: 2.4rem;
+  color: var(--cs-violet);
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 18px;
+  animation: sc-ai-idle 3s ease-in-out infinite;
+}
+
+@keyframes sc-ai-idle {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.08); opacity: 0.9; }
+}
+
+.sc-ai-placeholder p {
+  color: var(--cs-text);
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 10px;
+}
+
+.sc-ai-sub {
+  color: var(--cs-muted) !important;
+  font-size: 0.88rem !important;
+  font-weight: 300 !important;
+}
+
+.sc-ai-actions {
+  display: flex;
+  justify-content: center;
+  padding: 0 24px 28px;
+}
+
+/* ==========================================================================
+   BOOTSTRAP TABLE OVERRIDE
+   ========================================================================== */
+
+.table-dark {
+  --bs-table-bg: transparent;
+  --bs-table-border-color: rgba(120, 150, 200, 0.12);
+  --bs-table-hover-bg: rgba(34, 211, 238, 0.05);
+  color: var(--cs-text);
+}
+
+.table-dark thead th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cs-muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--cs-glass-border);
+  padding: 14px 16px;
+}
+
+.table-dark tbody td {
+  padding: 14px 16px;
+  font-size: 0.9rem;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(120, 150, 200, 0.08);
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 991px) {
+  .sc-page-header { padding: 130px 0 30px; }
+  .sc-scanner-card { padding: 24px 22px; }
+  .sc-progress-card { padding: 22px 18px; }
+  .sc-risk-banner { padding: 22px 24px; }
+}
+
+@media (max-width: 576px) {
+  .sc-page-header h1 { font-size: 1.9rem; }
+  .sc-input-group { flex-direction: column; align-items: stretch; padding: 12px 16px; }
+  .sc-scan-btn { width: 100%; justify-content: center; display: flex; align-items: center; }
+  .sc-progress-step span { display: none; }
+  .sc-progress-connector { min-width: 12px; }
+  .sc-risk-banner { flex-direction: column; text-align: center; }
+  .sc-result-card-header { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sc-step-icon,
+  .sc-ai-icon { animation: none !important; }
+}
+
+/* ==========================================================================
+   SCANNER.CSS ADDITIONS
+   Classes used in the backend-wired scan.html
+   ========================================================================== */
+
+/* Empty state (shown when no scan has been run) */
+.sc-empty-state {
+  text-align: center;
+  max-width: 520px;
+  margin: 20px auto 60px;
+  background: var(--cs-glass);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 20px;
+  padding: 60px 40px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.sc-empty-icon {
+  font-size: 3rem;
+  color: var(--cs-muted);
+  opacity: 0.45;
+  display: block;
+  margin-bottom: 22px;
+  animation: sc-ai-idle 3.5s ease-in-out infinite;
+}
+
+.sc-empty-state h3 {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.sc-empty-state p {
+  color: var(--cs-muted);
+  font-size: 0.95rem;
+  font-weight: 300;
+  margin: 0;
+}
+
+/* Cookie section divider */
+.sc-cookie-divider {
+  border-color: rgba(255, 255, 255, 0.07);
+  margin: 6px 0;
+}
+
+/* AI analysis content area (rendered HTML from backend) */
+.sc-ai-content {
+  padding: 10px 4px 20px;
+  color: var(--cs-text);
+  font-size: 0.95rem;
+  font-weight: 300;
+  line-height: 1.8;
+}
+
+.sc-ai-content h1,
+.sc-ai-content h2,
+.sc-ai-content h3,
+.sc-ai-content h4 {
+  color: #fff;
+  font-weight: 600;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.sc-ai-content ul,
+.sc-ai-content ol {
+  padding-left: 20px;
+  margin-bottom: 14px;
+}
+
+.sc-ai-content li { margin-bottom: 6px; }
+
+.sc-ai-content strong { color: var(--cs-cyan); font-weight: 600; }
+
+.sc-ai-content code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  background: rgba(34, 211, 238, 0.08);
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  border-radius: 5px;
+  padding: 2px 7px;
+  color: var(--cs-cyan);
+}

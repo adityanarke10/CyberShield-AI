@@ -53,7 +53,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('report.index') }}">
+                    <a class="nav-link" href="{{ url_for('reports.reports_page') }}">
                         <i class="fa-solid fa-file-shield me-1"></i> Reports
                     </a>
                 </li>
@@ -212,7 +212,9 @@
                         <i class="fa-solid fa-clock-rotate-left text-cyan me-2"></i>Recent Scans
                     </h4>
                     <!-- History route not implemented yet - temporary placeholder -->
-                    <a href="#" class="btn btn-sm btn-outline-cyan">View All</a>
+                    <a href="{{ url_for('dashboard.history') }}" class="btn btn-sm btn-outline-cyan">
+    View All
+</a>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-dark table-borderless align-middle cyber-table mb-0">
@@ -225,41 +227,82 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for scan in recent_scans|default([
-                                {'url': 'example.com', 'risk': 'Low', 'date': '2026-08-01', 'status': 'Completed'},
-                                {'url': 'testsite.io', 'risk': 'High', 'date': '2026-07-30', 'status': 'Completed'},
-                                {'url': 'mystartup.dev', 'risk': 'Medium', 'date': '2026-07-28', 'status': 'Completed'},
-                                {'url': 'oldportal.net', 'risk': 'Critical', 'date': '2026-07-25', 'status': 'Failed'},
-                            ]) %}
-                            <tr>
-                                <td class="fw-semibold">
-                                    <i class="fa-solid fa-globe text-cyan me-2"></i>{{ scan.url }}
-                                </td>
-                                <td>
-                                    {% if scan.risk == 'Low' %}
-                                        <span class="badge risk-badge risk-low">Low</span>
-                                    {% elif scan.risk == 'Medium' %}
-                                        <span class="badge risk-badge risk-medium">Medium</span>
-                                    {% elif scan.risk == 'High' %}
-                                        <span class="badge risk-badge risk-high">High</span>
-                                    {% else %}
-                                        <span class="badge risk-badge risk-critical">Critical</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-muted">{{ scan.date }}</td>
-                                <td>
-                                    {% if scan.status == 'Completed' %}
-                                        <span class="badge status-badge status-completed">
-                                            <i class="fa-solid fa-circle-check me-1"></i>Completed
-                                        </span>
-                                    {% else %}
-                                        <span class="badge status-badge status-failed">
-                                            <i class="fa-solid fa-circle-xmark me-1"></i>Failed
-                                        </span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
+                           {% if recent_scans %}
+
+    {% for scan in recent_scans %}
+
+    <tr>
+
+        <td class="fw-semibold">
+            <i class="fa-solid fa-globe text-cyan me-2"></i>
+            {{ scan.website }}
+        </td>
+
+        <td>
+
+            {% if scan.risk_level == "Low" %}
+
+                <span class="badge risk-badge risk-low">
+                    Low
+                </span>
+
+            {% elif scan.risk_level == "Medium" %}
+
+                <span class="badge risk-badge risk-medium">
+                    Medium
+                </span>
+
+            {% elif scan.risk_level == "High" %}
+
+                <span class="badge risk-badge risk-high">
+                    High
+                </span>
+
+            {% else %}
+
+                <span class="badge risk-badge risk-critical">
+                    Critical
+                </span>
+
+            {% endif %}
+
+        </td>
+
+        <td>
+
+            {{ scan.scan_date.strftime("%d %b %Y") }}
+
+        </td>
+
+        <td>
+
+            <span class="badge status-badge status-completed">
+
+                <i class="fa-solid fa-circle-check me-1"></i>
+
+                Completed
+
+            </span>
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+{% else %}
+
+<tr>
+
+    <td colspan="4" class="text-center text-muted">
+
+        No scans available
+
+    </td>
+
+</tr>
+
+{% endif %}
                         </tbody>
                     </table>
                 </div>
@@ -301,35 +344,55 @@
             <!-- Latest Activity -->
             <div class="glass-card p-4">
                 <h6 class="text-muted text-uppercase mb-3">Latest Activity</h6>
-                <ul class="list-unstyled activity-list mb-0">
-                    <li class="activity-item d-flex gap-3 mb-3">
-                        <div class="activity-dot bg-cyan"></div>
-                        <div>
-                            <p class="mb-0 small fw-semibold">Scan completed for example.com</p>
-                            <span class="text-muted small">2 hours ago</span>
-                        </div>
-                    </li>
-                    <li class="activity-item d-flex gap-3 mb-3">
-                        <div class="activity-dot bg-danger"></div>
-                        <div>
-                            <p class="mb-0 small fw-semibold">High risk detected on testsite.io</p>
-                            <span class="text-muted small">1 day ago</span>
-                        </div>
-                    </li>
-                    <li class="activity-item d-flex gap-3 mb-3">
-                        <div class="activity-dot bg-success"></div>
-                        <div>
-                            <p class="mb-0 small fw-semibold">PDF report generated for mystartup.dev</p>
-                            <span class="text-muted small">2 days ago</span>
-                        </div>
-                    </li>
-                    <li class="activity-item d-flex gap-3">
-                        <div class="activity-dot bg-warning"></div>
-                        <div>
-                            <p class="mb-0 small fw-semibold">SSL certificate expiring for oldportal.net</p>
-                            <span class="text-muted small">3 days ago</span>
-                        </div>
-                    </li>
+                <ul{% if latest_activity %}
+
+    {% for scan in latest_activity %}
+
+    <li class="activity-item d-flex gap-3 mb-3">
+
+        <div class="activity-dot
+            {% if scan.risk_level == 'Low' %}
+                bg-success
+            {% elif scan.risk_level == 'Medium' %}
+                bg-warning
+            {% else %}
+                bg-danger
+            {% endif %}
+        "></div>
+
+        <div>
+
+            <p class="mb-0 small fw-semibold">
+
+                Scan completed for {{ scan.website }}
+
+            </p>
+
+            <span class="text-muted small">
+
+                {{ scan.scan_date.strftime("%d %b %Y %I:%M %p") }}
+
+            </span>
+
+        </div>
+
+    </li>
+
+    {% endfor %}
+
+{% else %}
+
+<li class="activity-item">
+
+    <p class="text-muted">
+
+        No recent activity.
+
+    </p>
+
+</li>
+
+{% endif %}
                 </ul>
             </div>
 

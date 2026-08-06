@@ -3,97 +3,497 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Website Scanner | CyberShield AI</title>
+<title>Website Scanner — CyberShield AI</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- Project Styles -->
 <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='css/scan.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/scanner.css') }}">
 </head>
 <body>
-<div class="container py-5">
-<h1 class="text-center text-info mb-4">🌐 CyberShield AI - Website Scanner</h1>
-<div class="card shadow border-info"><div class="card-body">
-<form method="POST">
-<div class="mb-3">
-<label class="form-label">Website URL</label>
-<input class="form-control" name="url" placeholder="https://example.com" required>
-</div>
-<button class="btn btn-info" type="submit">Scan Website</button>
-</form>
-</div></div>
 
+<!-- Background layers -->
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar navbar-expand-lg fixed-top cs-navbar cs-navbar-scrolled" id="csNavbar">
+  <div class="container">
+    <a class="navbar-brand cs-brand" href="{{ url_for('dashboard.index') }}">
+      <span class="cs-brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+      CyberShield <span class="cs-brand-accent">AI</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#csNavContent" aria-controls="csNavContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars text-white" aria-hidden="true"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="csNavContent">
+      <ul class="navbar-nav mx-auto cs-nav-links">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link active" href="{{ url_for('scanner.scan') }}">Scanner</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.history') }}"">History</a></li>
+        <li class="nav-item"><a class="nav-link"href="{{ url_for('reports.reports_page') }}">Reports</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+      </ul>
+      <div class="d-flex cs-nav-actions">
+        <a href="{{ url_for('auth.logout') }}" class="btn cs-btn-outline">
+          <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ PAGE HEADER ============ -->
+<section class="sc-page-header">
+  <div class="container">
+    <div class="cs-eyebrow"><span class="cs-dot"></span> AI SECURITY ENGINE: ACTIVE</div>
+    <h1>Website Scanner</h1>
+    <p>Enter a target URL to run a full AI-powered vulnerability assessment.</p>
+  </div>
+</section>
+
+<!-- ============ SCANNER INPUT ============ -->
+<section class="sc-scanner-section">
+  <div class="container">
+    <div class="sc-scanner-card">
+      <form method="POST" action="{{ url_for('scanner.scan') }}" novalidate>
+        <label class="sc-scanner-label" for="url">Target Website URL</label>
+        <div class="sc-input-group">
+          <div class="sc-input-icon"><i class="fa-solid fa-globe"></i></div>
+          <input
+            type="url"
+            id="url"
+            name="url"
+            class="sc-input"
+            placeholder="https://example.com"
+            value="{{ result.url if result else '' }}"
+            required
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button type="submit" class="btn cs-btn-glow sc-scan-btn">
+            <i class="fa-solid fa-magnifying-glass-chart me-2"></i>Scan Website
+          </button>
+        </div>
+        <div class="sc-input-tags">
+          <span class="sc-tag-pill"><i class="fa-solid fa-check"></i> HTTP</span>
+          <span class="sc-tag-pill"><i class="fa-solid fa-check"></i> HTTPS</span>
+          <span class="sc-tag-pill"><i class="fa-solid fa-check"></i> SSL Analysis</span>
+          <span class="sc-tag-pill"><i class="fa-solid fa-check"></i> Security Headers</span>
+          <span class="sc-tag-pill"><i class="fa-solid fa-check"></i> Port Scan</span>
+          <span class="sc-tag-pill"><i class="fa-solid fa-check"></i> AI Report</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Flash messages -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="container">
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ============ SCAN PROGRESS ============ -->
+<section class="sc-section" id="progress">
+  <div class="container">
+    <div class="sc-progress-card">
+      <div class="sc-progress-header">
+        <span class="cs-tag">SCAN PROGRESS</span>
+        <span class="sc-progress-status">
+          <span class="cs-dot"></span>
+          {% if result %}Scan Complete{% else %}Awaiting Target{% endif %}
+        </span>
+      </div>
+      <div class="sc-progress-track">
+        <div class="sc-progress-step {{ 'sc-done' if result else '' }}">
+          <div class="sc-step-icon"><i class="fa-solid fa-link"></i></div>
+          <span>URL Validation</span>
+        </div>
+        <div class="sc-progress-connector"></div>
+        <div class="sc-progress-step {{ 'sc-done' if headers else '' }}">
+          <div class="sc-step-icon"><i class="fa-solid fa-file-shield"></i></div>
+          <span>Header Analysis</span>
+        </div>
+        <div class="sc-progress-connector"></div>
+        <div class="sc-progress-step {{ 'sc-done' if ssl_info else '' }}">
+          <div class="sc-step-icon"><i class="fa-solid fa-lock"></i></div>
+          <span>SSL Inspection</span>
+        </div>
+        <div class="sc-progress-connector"></div>
+        <div class="sc-progress-step {{ 'sc-done' if result else '' }}">
+          <div class="sc-step-icon"><i class="fa-solid fa-network-wired"></i></div>
+          <span>Port Scan</span>
+        </div>
+        <div class="sc-progress-connector"></div>
+        <div class="sc-progress-step {{ 'sc-done' if security_score else '' }}">
+          <div class="sc-step-icon"><i class="fa-solid fa-brain"></i></div>
+          <span>AI Analysis</span>
+        </div>
+        <div class="sc-progress-connector"></div>
+        <div class="sc-progress-step {{ 'sc-done' if result and security_score else '' }}">
+          <div class="sc-step-icon"><i class="fa-solid fa-file-pdf"></i></div>
+          <span>Report</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ RESULTS SECTION ============ -->
 {% if result %}
-{% if result.error %}
-<div class="alert alert-danger mt-4">{{ result.error }}</div>
+<section class="sc-section" id="results">
+  <div class="container">
+    <div class="cs-section-head">
+      <span class="cs-tag">ASSESSMENT RESULTS</span>
+      <h2>Scan Results</h2>
+      <p>Full assessment for <span class="mono">{{ result.url }}</span></p>
+    </div>
+
+    <!-- Risk Score Banner -->
+    {% if security_score %}
+    <div class="sc-risk-banner mb-4">
+      <div class="sc-risk-left">
+        <span class="cs-tag">OVERALL RISK</span>
+        <div class="sc-risk-value
+          {% if security_score.risk == 'Critical' %}cs-badge-critical
+          {% elif security_score.risk == 'High' %}cs-badge-high
+          {% elif security_score.risk == 'Medium' %}cs-badge-medium
+          {% else %}cs-badge-ok{% endif %}">
+          {{ security_score.risk }}
+        </div>
+        <div class="sc-risk-label">Security Score: {{ security_score.score }} / 100</div>
+      </div>
+      <div class="sc-risk-right">
+        <div class="cs-gauge-ring"
+          style="--gauge-value: {{ security_score.score }}%;"
+          role="img"
+          aria-label="Security score: {{ security_score.score }} out of 100">
+          <div class="cs-gauge-inner" aria-hidden="true">
+            <span class="cs-gauge-number">{{ security_score.score }}</span>
+            <span class="cs-gauge-max">/100</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="row g-4">
+
+      <!-- Website Information -->
+      <div class="col-lg-6">
+        <div class="sc-result-card">
+          <div class="sc-result-card-header">
+            <div class="cs-feature-icon"><i class="fa-solid fa-globe"></i></div>
+            <div>
+              <span class="cs-tag">MODULE 1</span>
+              <h3>Website Information</h3>
+            </div>
+          </div>
+          <div class="sc-result-body">
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-link me-2"></i>URL</span>
+              <span class="cs-findings-val mono">{{ result.url }}</span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-signal me-2"></i>HTTP Status</span>
+              <span class="cs-findings-val
+                {% if result.status_code and result.status_code < 300 %}cs-badge-ok
+                {% elif result.status_code and result.status_code < 500 %}cs-badge-medium
+                {% else %}cs-badge-high{% endif %}">
+                {{ result.status_code }}
+              </span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-server me-2"></i>Server</span>
+              <span class="cs-findings-val mono">{{ result.server if result.server else 'Unknown' }}</span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-stopwatch me-2"></i>Response Time</span>
+              <span class="cs-findings-val mono">{{ result.response_time }}</span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-network-wired me-2"></i>IP Address</span>
+              <span class="cs-findings-val mono">{{ result.ip_address if result.ip_address else 'Unknown' }}</span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-file-code me-2"></i>Content-Type</span>
+              <span class="cs-findings-val mono">{{ result.content_type if result.content_type else 'Unknown' }}</span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-lock me-2"></i>HTTPS</span>
+              <span class="cs-findings-val {% if result.https %}cs-badge-ok{% else %}cs-badge-high{% endif %}">
+                {% if result.https %}Enabled{% else %}Disabled{% endif %}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Headers -->
+      <div class="col-lg-6">
+        <div class="sc-result-card">
+          <div class="sc-result-card-header">
+            <div class="cs-feature-icon"><i class="fa-solid fa-file-shield"></i></div>
+            <div>
+              <span class="cs-tag">MODULE 2</span>
+              <h3>Security Headers</h3>
+            </div>
+          </div>
+          <div class="sc-result-body">
+            {% if headers %}
+              {% for header, value in headers.items() %}
+              <div class="cs-findings-row">
+                <span class="cs-findings-key"><i class="fa-solid fa-shield me-2"></i>{{ header }}</span>
+                {% if value %}
+                  <span class="cs-findings-val cs-badge-ok">Present</span>
+                {% else %}
+                  <span class="cs-findings-val cs-badge-high">Missing</span>
+                {% endif %}
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="cs-findings-row">
+                <span class="cs-findings-key">No header data available</span>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- SSL Certificate -->
+      <div class="col-lg-6">
+        <div class="sc-result-card">
+          <div class="sc-result-card-header">
+            <div class="cs-feature-icon"><i class="fa-solid fa-lock"></i></div>
+            <div>
+              <span class="cs-tag">MODULE 3</span>
+              <h3>SSL Certificate</h3>
+            </div>
+          </div>
+          <div class="sc-result-body">
+            {% if ssl_info %}
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-circle-check me-2"></i>Status</span>
+              <span class="cs-findings-val {% if ssl_info.status == 'Valid' %}cs-badge-ok{% else %}cs-badge-high{% endif %}">
+                {{ ssl_info.status }}
+              </span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-building me-2"></i>Issued To</span>
+              <span class="cs-findings-val mono">{{ ssl_info.issued_to }}</span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-stamp me-2"></i>Issuer</span>
+              <span class="cs-findings-val mono">{{ ssl_info.issuer }}</span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-calendar-xmark me-2"></i>Expires</span>
+              <span class="cs-findings-val mono">{{ ssl_info.expires }}</span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-clock me-2"></i>Days Left</span>
+              <span class="cs-findings-val
+                {% if ssl_info.days_left and ssl_info.days_left|int > 30 %}cs-badge-ok
+                {% elif ssl_info.days_left and ssl_info.days_left|int > 0 %}cs-badge-medium
+                {% else %}cs-badge-high{% endif %}">
+                {{ ssl_info.days_left }} days
+              </span>
+            </div>
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-key me-2"></i>Version</span>
+              <span class="cs-findings-val mono">{{ ssl_info.version }}</span>
+            </div>
+            {% else %}
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-circle-xmark me-2"></i>Status</span>
+              <span class="cs-findings-val cs-badge-high">No SSL / Not Available</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Technology Detection -->
+      <div class="col-lg-6">
+        <div class="sc-result-card">
+          <div class="sc-result-card-header">
+            <div class="cs-feature-icon"><i class="fa-solid fa-microchip"></i></div>
+            <div>
+              <span class="cs-tag">MODULE 4</span>
+              <h3>Technology Detection</h3>
+            </div>
+          </div>
+          <div class="sc-result-body">
+            {% if technologies %}
+            <div class="sc-port-grid">
+              {% for tech in technologies %}
+                <span class="sc-port-pill">{{ tech }}</span>
+              {% endfor %}
+            </div>
+            {% else %}
+            <div class="cs-findings-row">
+              <span class="cs-findings-key">No technologies detected</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Cookie Analysis -->
+      <div class="col-lg-6">
+        <div class="sc-result-card">
+          <div class="sc-result-card-header">
+            <div class="cs-feature-icon"><i class="fa-solid fa-cookie-bite"></i></div>
+            <div>
+              <span class="cs-tag">MODULE 5</span>
+              <h3>Cookie Analysis</h3>
+            </div>
+          </div>
+          <div class="sc-result-body">
+            {% if cookies %}
+              {% for cookie in cookies %}
+              <div class="cs-findings-row">
+                <span class="cs-findings-key"><i class="fa-solid fa-cookie me-2"></i>{{ cookie.name }}</span>
+                <span class="cs-findings-val {% if cookie.secure %}cs-badge-ok{% else %}cs-badge-medium{% endif %}">
+                  {% if cookie.secure %}Secure{% else %}Not Secure{% endif %}
+                </span>
+              </div>
+              <div class="cs-findings-row">
+                <span class="cs-findings-key"><i class="fa-solid fa-globe me-2"></i>Domain</span>
+                <span class="cs-findings-val mono">{{ cookie.domain if cookie.domain else '—' }}</span>
+              </div>
+              <div class="cs-findings-row">
+                <span class="cs-findings-key"><i class="fa-solid fa-folder me-2"></i>Path</span>
+                <span class="cs-findings-val mono">{{ cookie.path if cookie.path else '/' }}</span>
+              </div>
+              {% if not loop.last %}<hr class="sc-cookie-divider">{% endif %}
+              {% endfor %}
+            {% else %}
+            <div class="cs-findings-row">
+              <span class="cs-findings-key">No cookies found</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Issues -->
+      {% if security_score and security_score.issues %}
+      <div class="col-lg-6">
+        <div class="sc-result-card">
+          <div class="sc-result-card-header">
+            <div class="cs-feature-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <div>
+              <span class="cs-tag">MODULE 6</span>
+              <h3>Security Issues</h3>
+            </div>
+          </div>
+          <div class="sc-result-body">
+            {% for issue in security_score.issues %}
+            <div class="cs-findings-row">
+              <span class="cs-findings-key"><i class="fa-solid fa-circle-exclamation me-2"></i>{{ issue }}</span>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- AI Analysis -->
+      <div class="col-12">
+        <div class="sc-result-card sc-ai-card">
+          <div class="sc-result-card-header">
+            <div class="cs-feature-icon"><i class="fa-solid fa-brain"></i></div>
+            <div>
+              <span class="cs-tag">MODULE 7 — POWERED BY GOOGLE GEMINI</span>
+              <h3>AI Security Analysis &amp; Recommendations</h3>
+            </div>
+          </div>
+          <div class="sc-ai-body">
+            {% if result.ai_analysis %}
+              <div class="sc-ai-content">{{ result.ai_analysis | safe }}</div>
+            {% else %}
+              <div class="sc-ai-placeholder">
+                <i class="fa-solid fa-wand-magic-sparkles sc-ai-icon"></i>
+                <p>AI analysis was not returned for this scan.</p>
+                <p class="sc-ai-sub">Ensure the Google Gemini API key is configured and retry the scan.</p>
+              </div>
+            {% endif %}
+          </div>
+          <div class="sc-ai-actions">
+            <a href="#" class="btn cs-btn-glow">
+              <i class="fa-solid fa-file-pdf me-2"></i>Download PDF Report
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 {% else %}
 
-<div class="card mt-4 shadow"><div class="card-header bg-info"><h4>Website Information</h4></div><div class="card-body">
-<table class="table table-bordered">
-<tr><th>Website</th><td>{{ result.url }}</td></tr>
-<tr><th>Status Code</th><td>{{ result.status_code }}</td></tr>
-<tr><th>Response Time</th><td>{{ result.response_time }} ms</td></tr>
-<tr><th>IP Address</th><td>{{ result.ip_address }}</td></tr>
-<tr><th>Server</th><td>{{ result.server }}</td></tr>
-<tr><th>Content Type</th><td>{{ result.content_type }}</td></tr>
-<tr><th>Protocol</th><td>{{ result.https }}</td></tr>
-</table></div></div>
-
-{% if headers %}
-<div class="card mt-4 shadow"><div class="card-header bg-dark text-white"><h4>Security Headers</h4></div><div class="card-body">
-<table class="table table-bordered">
-<tr><th>Header</th><th>Status</th></tr>
-{% for header,value in headers.items() %}
-<tr><td>{{ header }}</td><td>{% if value=="Missing" %}<span class="badge bg-danger">Missing</span>{% else %}<span class="badge bg-success">Present</span>{% endif %}</td></tr>
-{% endfor %}
-</table></div></div>
-{% endif %}
-
-{% if ssl_info %}
-<div class="card mt-4 shadow"><div class="card-header bg-primary text-white"><h4>SSL Certificate</h4></div><div class="card-body">
-<table class="table table-bordered">
-<tr><th>Issued To</th><td>{{ ssl_info.issued_to }}</td></tr>
-<tr><th>Issuer</th><td>{{ ssl_info.issuer }}</td></tr>
-<tr><th>Expires</th><td>{{ ssl_info.expires }}</td></tr>
-<tr><th>Days Remaining</th><td>{{ ssl_info.days_left }}</td></tr>
-<tr><th>TLS Version</th><td>{{ ssl_info.version }}</td></tr>
-<tr><th>Status</th><td>{{ ssl_info.status }}</td></tr>
-</table></div></div>
-{% endif %}
-
-{% if technologies %}
-<div class="card mt-4 shadow"><div class="card-header bg-success text-white"><h4>Technology Detection</h4></div><div class="card-body">
-<ul class="list-group">{% for tech in technologies %}<li class="list-group-item">{{ tech }}</li>{% endfor %}</ul>
-</div></div>
-{% endif %}
-
-{% if cookies %}
-<div class="card mt-4 shadow"><div class="card-header bg-warning"><h4>Cookie Analysis</h4></div><div class="card-body">
-<table class="table table-bordered">
-<tr><th>Name</th><th>Secure</th><th>Domain</th><th>Path</th></tr>
-{% for cookie in cookies %}
-<tr><td>{{ cookie.name }}</td><td>{{ cookie.secure }}</td><td>{{ cookie.domain }}</td><td>{{ cookie.path }}</td></tr>
-{% endfor %}
-</table></div></div>
-{% endif %}
-
-{% if security_score %}
-<div class="card mt-4 shadow">
-<div class="card-header bg-danger text-white"><h4>🛡️ Overall Security Score</h4></div>
-<div class="card-body text-center">
-<h1 class="display-2 fw-bold text-primary">{{ security_score.score }}/100</h1>
-<h3>Risk Level: {{ security_score.risk }}</h3>
-<hr>
-<ul class="text-start">
-{% for issue in security_score.issues %}
-<li>{{ issue }}</li>
-{% endfor %}
-</ul>
-</div></div>
-{% endif %}
+<!-- ============ EMPTY STATE ============ -->
+<section class="sc-section" id="empty-state">
+  <div class="container">
+    <div class="sc-empty-state">
+      <i class="fa-solid fa-satellite-dish sc-empty-icon"></i>
+      <h3>No Scan Results Yet</h3>
+      <p>Enter a website URL above and click <strong>Scan Website</strong> to run a full AI-powered security assessment.</p>
+    </div>
+  </div>
+</section>
 
 {% endif %}
-{% endif %}
-</div>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="cs-footer">
+  <div class="container">
+    <div class="cs-footer-center">
+      <a class="navbar-brand cs-brand" href="{{ url_for('dashboard.index') }}">
+        <span class="cs-brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        CyberShield <span class="cs-brand-accent">AI</span>
+      </a>
+      <p class="cs-footer-about">Developed by Aditya Narke</p>
+    </div>
+    <hr class="cs-footer-divider">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center cs-footer-bottom">
+      <p class="mb-0">© 2026 CyberShield AI</p>
+      <p class="mb-0"><i class="fa-solid fa-circle cs-status-dot" aria-hidden="true"></i> All systems operational</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

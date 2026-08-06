@@ -1,5 +1,8 @@
 from flask import Blueprint, render_template, request
 
+from models.scan_history import ScanHistory
+from models import db
+
 from scanner.website_info import scan_website
 from scanner.header_scan import scan_headers
 from scanner.ssl_scan import scan_ssl
@@ -49,6 +52,15 @@ def scan():
                 ssl_info,
                 cookies
             )
+            
+            history = ScanHistory(
+                website=result["url"],
+                security_score=security_score["score"],
+                risk_level=security_score["risk"]
+            )
+
+            db.session.add(history)
+            db.session.commit()
 
         except Exception as e:
 

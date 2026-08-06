@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Report | CyberShield AI</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Project Stylesheets -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/view_report.css') }}">
+</head>
+<body>
+
+<!-- ===================== NAVBAR ===================== -->
+<nav class="navbar navbar-expand-lg navbar-dark cyber-navbar sticky-top">
+    <div class="container-fluid px-4">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('dashboard.index') }}">
+            <i class="fa-solid fa-shield-halved text-cyan fs-3"></i>
+            <span class="fw-bold fs-4">CyberShield <span class="text-cyan">AI</span></span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMain">
+            <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-2">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('dashboard.index') }}">
+                        <i class="fa-solid fa-gauge-high me-1"></i> Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('scanner.scan') }}">
+                        <i class="fa-solid fa-magnifying-glass-chart me-1"></i> Scanner
+                    </a>
+                </li>
+                <li class="nav-item">
+                   <a class="nav-link" href="{{ url_for('dashboard.history') }}">
+    <i class="fa-solid fa-clock-rotate-left me-1"></i> History
+</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="{{ url_for('reports.reports_page') }}">
+                        <i class="fa-solid fa-file-shield me-1"></i> Reports
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">
+                        <i class="fa-solid fa-user-shield me-1"></i> Profile
+                    </a>
+                </li>
+                <li class="nav-item ms-lg-2">
+                    <a class="btn btn-outline-cyan btn-sm px-3" href="{{ url_for('auth.logout') }}">
+                        <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ===================== PAGE WRAPPER ===================== -->
+<div class="container-fluid px-4 py-4 vr-wrapper">
+
+    <!-- ============ PAGE HEADER ============ -->
+    <div class="vr-page-header mb-4 d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+        <div>
+            <div class="vr-breadcrumb mb-1">
+                <a href="{{ url_for('reports.reports_page') }}">
+                    <i class="fa-solid fa-file-shield me-1"></i>Reports
+                </a>
+                <i class="fa-solid fa-chevron-right mx-2 text-faint"></i>
+                <span class="text-cyan">View Report</span>
+            </div>
+            <h3 class="fw-bold mb-0">
+                Security Report &nbsp;<span class="text-cyan">— {{ scan.website }}</span>
+            </h3>
+            <p class="text-muted small mb-0 mt-1">
+                <i class="fa-regular fa-calendar me-1"></i>Scanned on {{ scan.scan_date.strftime("%d %b %Y %I:%M %p") }}
+                &nbsp;&nbsp;
+                <i class="fa-solid fa-robot me-1 text-cyan"></i>AI-powered analysis by Google Gemini
+            </p>
+        </div>
+        <div class="d-flex gap-2 flex-wrap">
+            <a href="{{ url_for('reports.reports_page') }}" class="btn btn-outline-cyan px-4 fw-semibold">
+                <i class="fa-solid fa-arrow-left me-2"></i>Back to Reports
+            </a>
+            <a href="{{ url_for('reports.download_report', id=scan.id) }}" class="btn btn-cyan px-4 fw-semibold shadow-glow">
+                <i class="fa-solid fa-file-pdf me-2"></i>Download PDF
+            </a>
+        </div>
+    </div>
+
+    <!-- ============ TOP STATS ROW ============ -->
+    <div class="row g-4 mb-4">
+
+        <!-- Security Score -->
+        <div class="col-12 col-md-4">
+            <div class="glass-card vr-score-card p-4 h-100 text-center">
+                <p class="vr-section-label mb-3">Overall Security Score</p>
+                <div class="vr-score-ring mx-auto mb-3
+                    {% if scan.security_score >= 80 %}vr-ring-safe
+                    {% elif scan.security_score >= 50 %}vr-ring-warn
+                    {% else %}vr-ring-danger{% endif %}">
+                    <span class="vr-score-num">{{ scan.security_score }}</span>
+                    <span class="vr-score-denom">/100</span>
+                </div>
+                <!-- Risk Badge -->
+                <span class="badge vr-risk-badge
+                    {% if scan.risk_level == 'Low' %}risk-low
+                    {% elif scan.risk_level == 'Medium' %}risk-medium
+                    {% elif scan.risk_level == 'High' %}risk-high
+                    {% else %}risk-critical{% endif %}
+                    px-3 py-2 mb-3">
+                    {% if scan.risk_level == 'Low' %}
+                        <i class="fa-solid fa-shield-halved me-1"></i>
+                    {% elif scan.risk_level == 'Medium' %}
+                        <i class="fa-solid fa-circle-exclamation me-1"></i>
+                    {% elif scan.risk_level == 'High' %}
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i>
+                    {% else %}
+                        <i class="fa-solid fa-skull-crossbones me-1"></i>
+                    {% endif %}
+                    {{ scan.risk_level }} Risk
+                </span>
+                <p class="text-muted small mb-0">Based on headers, SSL, ports &amp; AI analysis</p>
+            </div>
+        </div>
+
+        <!-- Quick Metrics -->
+        <div class="col-12 col-md-8">
+            <div class="glass-card p-4 h-100">
+                <p class="vr-section-label mb-3">Scan Summary</p>
+                <div class="row g-3">
+                    <div class="col-6 col-sm-3">
+                        <div class="vr-metric">
+                            <div class="vr-metric-icon bg-cyan-soft">
+                                <i class="fa-solid fa-globe"></i>
+                            </div>
+                            <span class="vr-metric-val">{{ scan.website }}</span>
+                            <span class="vr-metric-label">Target</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="vr-metric">
+                            <div class="vr-metric-icon bg-success-soft">
+                                <i class="fa-solid fa-lock"></i>
+                            </div>
+                            <span class="vr-metric-val">{{ scan.ssl_status | default('Valid') }}</span>
+                            <span class="vr-metric-label">SSL Status</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="vr-metric">
+                            <div class="vr-metric-icon bg-danger-soft">
+                                <i class="fa-solid fa-list-check"></i>
+                            </div>
+                            <span class="vr-metric-val">{{ scan.headers_passed | default('—') }}</span>
+                            <span class="vr-metric-label">Headers OK</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="vr-metric">
+                            <div class="vr-metric-icon bg-warning-soft">
+                                <i class="fa-solid fa-network-wired"></i>
+                            </div>
+                            <span class="vr-metric-val">{{ scan.open_ports | default('—') }}</span>
+                            <span class="vr-metric-label">Open Ports</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ MAIN CONTENT ROW ============ -->
+    <div class="row g-4">
+
+        <!-- -------- LEFT COLUMN -------- -->
+        <div class="col-lg-8">
+
+            <!-- WEBSITE INFORMATION CARD -->
+            <div class="glass-card vr-section-card p-4 mb-4">
+                <div class="vr-card-header mb-4">
+                    <div class="vr-card-icon bg-cyan-soft">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Website Information</h5>
+                        <span class="text-muted small">Server metadata and general details</span>
+                    </div>
+                    <span class="badge status-badge status-completed ms-auto">
+                        <i class="fa-solid fa-circle-check me-1"></i>Collected
+                    </span>
+                </div>
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Target URL</span>
+                            <span class="vr-info-value">{{ scan.website }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Scan Date</span>
+                            <span class="vr-info-value">{{ scan.scan_date.strftime("%d %b %Y %I:%M %p") }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">IP Address</span>
+                            <span class="vr-info-value">{{ website_info.ip_address }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Server</span>
+                            <span class="vr-info-value">{{ website_info.server }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">CMS / Framework</span>
+                            <span class="vr-info-value">{{ scan.cms | default('—') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">HTTP Status</span>
+                            <span class="vr-info-value">{{ website_info.status_code }}}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Page Title</span>
+                            <span class="vr-info-value">{{ scan.page_title | default('—') }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Hosting Provider</span>
+                            <span class="vr-info-value">{{ scan.hosting | default('—') }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SSL STATUS CARD -->
+            <div class="glass-card vr-section-card p-4 mb-4">
+                <div class="vr-card-header mb-4">
+                    <div class="vr-card-icon bg-success-soft">
+                        <i class="fa-solid fa-lock"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">SSL Certificate</h5>
+                        <span class="text-muted small">Certificate validity and TLS configuration</span>
+                    </div>
+                    {% if scan.ssl_valid | default(true) %}
+                    <span class="badge status-badge status-completed ms-auto">
+                        <i class="fa-solid fa-circle-check me-1"></i>Valid
+                    </span>
+                    {% else %}
+                    <span class="badge status-badge status-failed ms-auto">
+                        <i class="fa-solid fa-circle-xmark me-1"></i>Invalid
+                    </span>
+                    {% endif %}
+                </div>
+
+                <div class="vr-ssl-banner mb-4
+                    {% if scan.ssl_valid | default(true) %}vr-ssl-ok{% else %}vr-ssl-fail{% endif %}">
+                    <div class="vr-ssl-icon">
+                        <i class="fa-solid {% if scan.ssl_valid | default(true) %}fa-lock{% else %}fa-lock-open{% endif %}"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                        <p class="fw-semibold mb-1">{{ ssl_info.status }}</p>
+                        <div class="progress vr-ssl-bar">
+                            <div class="progress-bar vr-ssl-progress" role="progressbar"
+                                 style="width: 100%;"></div>
+                        </div>
+                        <p class="small text-muted mt-1 mb-0">
+                            Expires: <span class="fw-semibold">{{ ssl_info.expires }}</span>
+                        </p>
+                    </div>
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Issuer</span>
+                            <span class="vr-info-value">{{ ssl_info.issuer }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Protocol</span>
+                            <span class="vr-info-value">{{ ssl_info.version }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Valid From</span>
+                            <span class="vr-info-value">—</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Valid Until</span>
+                            <span class="vr-info-value">{{ ssl_info.expires }}</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Cipher Suite</span>
+                            <span class="vr-info-value">Not Available</span>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="vr-info-row">
+                            <span class="vr-info-label">Wildcard</span>
+                            <span class="vr-info-value">Not Available</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECURITY HEADERS CARD -->
+            <div class="glass-card vr-section-card p-4 mb-4">
+                <div class="vr-card-header mb-4">
+                    <div class="vr-card-icon bg-danger-soft">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Security Headers</h5>
+                        <span class="text-muted small">HTTP response header analysis</span>
+                    </div>
+                    <span class="badge status-badge status-failed ms-auto">
+                        <i class="fa-solid fa-triangle-exclamation me-1"></i>Issues Found
+                    </span>
+                </div>
+
+                {% if headers %}
+    {% for name, value in headers.items() %}
+                    <div class="vr-header-row {% if value == 'Missing' %}vr-header-fail{% else %}vr-header-pass{% endif %}">
+
+    <span class="vr-header-status-icon">
+        {% if value == "Missing" %}
+            <i class="fa-solid fa-circle-xmark"></i>
+        {% else %}
+            <i class="fa-solid fa-circle-check"></i>
+        {% endif %}
+    </span>
+
+    <span class="vr-header-name">
+        {{ name }}
+    </span>
+
+    <span class="vr-header-value text-muted">
+        {{ value }}
+    </span>
+
+    <span class="badge risk-badge ms-auto {% if value == 'Missing' %}risk-high{% else %}risk-low{% endif %}">
+        {% if value == "Missing" %}
+            Missing
+        {% else %}
+            Present
+        {% endif %}
+    </span>
+
+</div>
+                    {% endfor %}
+                {% else %}
+                    <!-- Placeholder rows when no data from backend yet -->
+                    <div class="vr-header-row vr-header-pass">
+                        <span class="vr-header-status-icon"><i class="fa-solid fa-circle-check"></i></span>
+                        <span class="vr-header-name">Content-Security-Policy</span>
+                        <span class="vr-header-value text-muted"></span>
+                        <span class="badge risk-badge risk-low ms-auto">Present</span>
+                    </div>
+                    <div class="vr-header-row vr-header-fail">
+                        <span class="vr-header-status-icon"><i class="fa-solid fa-circle-xmark"></i></span>
+                        <span class="vr-header-name">X-Frame-Options</span>
+                        <span class="vr-header-value text-muted"></span>
+                        <span class="badge risk-badge risk-high ms-auto">Missing</span>
+                    </div>
+                    <div class="vr-header-row vr-header-pass">
+                        <span class="vr-header-status-icon"><i class="fa-solid fa-circle-check"></i></span>
+                        <span class="vr-header-name">Strict-Transport-Security</span>
+                        <span class="vr-header-value text-muted"></span>
+                        <span class="badge risk-badge risk-low ms-auto">Present</span>
+                    </div>
+                    <div class="vr-header-row vr-header-fail">
+                        <span class="vr-header-status-icon"><i class="fa-solid fa-circle-xmark"></i></span>
+                        <span class="vr-header-name">X-Content-Type-Options</span>
+                        <span class="vr-header-value text-muted"></span>
+                        <span class="badge risk-badge risk-high ms-auto">Missing</span>
+                    </div>
+                    <div class="vr-header-row vr-header-warn">
+                        <span class="vr-header-status-icon"><i class="fa-solid fa-circle-exclamation"></i></span>
+                        <span class="vr-header-name">Referrer-Policy</span>
+                        <span class="vr-header-value text-muted"></span>
+                        <span class="badge risk-badge risk-medium ms-auto">Weak</span>
+                    </div>
+                    <div class="vr-header-row vr-header-fail">
+                        <span class="vr-header-status-icon"><i class="fa-solid fa-circle-xmark"></i></span>
+                        <span class="vr-header-name">Permissions-Policy</span>
+                        <span class="vr-header-value text-muted"></span>
+                        <span class="badge risk-badge risk-high ms-auto">Missing</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- TECHNOLOGIES CARD -->
+            <div class="glass-card vr-section-card p-4 mb-4">
+                <div class="vr-card-header mb-4">
+                    <div class="vr-card-icon bg-blue-soft">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Technologies Detected</h5>
+                        <span class="text-muted small">Frameworks, libraries and services identified</span>
+                    </div>
+                </div>
+                <div class="vr-tech-grid">
+                    {% if technologies %}
+                        {% for tech in technologies %}
+                        <div class="vr-tech-chip">
+                            <i class="fa-solid fa-code me-2 text-cyan"></i>{{ tech }}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="vr-tech-chip"><i class="fa-brands fa-js me-2 text-cyan"></i>JavaScript</div>
+                        <div class="vr-tech-chip"><i class="fa-brands fa-react me-2 text-cyan"></i>React</div>
+                        <div class="vr-tech-chip"><i class="fa-solid fa-server me-2 text-cyan"></i>Nginx</div>
+                        <div class="vr-tech-chip"><i class="fa-solid fa-cloud me-2 text-cyan"></i>Cloudflare</div>
+                        <div class="vr-tech-chip"><i class="fa-solid fa-code me-2 text-cyan"></i>Bootstrap</div>
+                        <div class="vr-tech-chip"><i class="fa-brands fa-google me-2 text-cyan"></i>Google Analytics</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- COOKIES CARD -->
+            <div class="glass-card vr-section-card p-4 mb-4">
+                <div class="vr-card-header mb-4">
+                    <div class="vr-card-icon bg-warning-soft">
+                        <i class="fa-solid fa-cookie-bite"></i>
+                    </div>
+                    <div>
+                        <h5 class="fw-bold mb-0">Cookie Analysis</h5>
+                        <span class="text-muted small">Cookie security attributes and risks</span>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-dark table-borderless align-middle vr-table mb-0">
+                        <thead>
+                            <tr>
+                                <th>Cookie Name</th>
+                                <th>Secure</th>
+                                <th>Domain</th>
+                                <th>Path</th>
+                            </tr>
+                        </thead>
+<tbody>
+
+{% if cookies %}
+
+    {% for cookie in cookies %}
+
+    <tr>
+
+        <td class="vr-cookie-name">
+            {{ cookie.name }}
+        </td>
+
+        <td>
+            {% if cookie.secure == "Yes" %}
+                <i class="fa-solid fa-circle-check text-success"></i>
+            {% else %}
+                <i class="fa-solid fa-circle-xmark text-danger"></i>
+            {% endif %}
+        </td>
+
+        <td>
+            {{ cookie.domain }}
+        </td>
+
+        <td>
+            {{ cookie.path }}
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+{% else %}
+
+    <tr>
+        <td colspan="4" class="text-center text-muted">
+            No Cookies Found
+        </td>
+    </tr>
+
+{% endif %}
+
+</tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div><!-- /.col-lg-8 -->
+
+        <!-- -------- RIGHT COLUMN -------- -->
+        <div class="col-lg-4">
+
+           <!-- AI Analysis -->
+<div class="vr-ai-block mb-3">
+
+    {% for analysis in ai_analysis %}
+
+    <div class="vr-ai-text mb-3">
+
+        <i class="fa-solid fa-robot text-cyan me-2"></i>
+
+        {{ analysis }}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+               <!-- AI Recommendations -->
+<div class="vr-ai-recs">
+
+    <p class="vr-section-label mb-2">
+        Recommendations
+    </p>
+
+    {% for rec in ai_recommendations %}
+
+    <div class="vr-rec-item">
+        <i class="fa-solid fa-arrow-right text-cyan me-2"></i>
+        {{ rec }}
+    </div>
+
+    {% endfor %}
+
+</div>
+
+           <!-- SCORE BREAKDOWN CARD -->
+<div class="glass-card vr-section-card p-4 mb-4">
+
+    <p class="vr-section-label mb-3">
+        <i class="fa-solid fa-chart-pie text-cyan me-2"></i>
+        Score Breakdown
+    </p>
+
+    <!-- Security Headers -->
+    <div class="vr-breakdown-item mb-3">
+        <div class="d-flex justify-content-between mb-1">
+            <span class="small text-muted">Security Headers</span>
+            <span class="small fw-semibold text-danger">
+                {{ header_score }}%
+            </span>
+        </div>
+
+        <div class="progress vr-breakdown-bar">
+            <div class="progress-bar vr-bar-danger"
+                 style="width: {{ header_score }}%;">
+            </div>
+        </div>
+    </div>
+
+    <!-- SSL -->
+    <div class="vr-breakdown-item mb-3">
+        <div class="d-flex justify-content-between mb-1">
+            <span class="small text-muted">SSL / TLS</span>
+            <span class="small fw-semibold text-success">
+                {{ ssl_score }}%
+            </span>
+        </div>
+
+        <div class="progress vr-breakdown-bar">
+            <div class="progress-bar vr-bar-success"
+                 style="width: {{ ssl_score }}%;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookies -->
+    <div class="vr-breakdown-item mb-3">
+        <div class="d-flex justify-content-between mb-1">
+            <span class="small text-muted">Cookie Security</span>
+            <span class="small fw-semibold text-warning">
+                {{ cookie_score }}%
+            </span>
+        </div>
+
+        <div class="progress vr-breakdown-bar">
+            <div class="progress-bar vr-bar-warning"
+                 style="width: {{ cookie_score }}%;">
+            </div>
+        </div>
+    </div>
+
+    <!-- Ports -->
+    <div class="vr-breakdown-item">
+        <div class="d-flex justify-content-between mb-1">
+            <span class="small text-muted">Port Exposure</span>
+            <span class="small fw-semibold text-info">
+                {{ port_score }}%
+            </span>
+        </div>
+
+        <div class="progress vr-breakdown-bar">
+            <div class="progress-bar vr-bar-info"
+                 style="width: {{ port_score }}%;">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+            <!-- ACTIONS CARD -->
+            <div class="glass-card vr-section-card p-4">
+                <p class="vr-section-label mb-3">
+                    <i class="fa-solid fa-download text-cyan me-2"></i>Actions
+                </p>
+                <p class="text-muted small mb-3">
+                    Download a complete PDF security report including all findings and AI recommendations.
+                </p>
+                <a href="{{ url_for('reports.download_report', id=scan.id) }}" class="btn btn-cyan w-100 fw-semibold mb-2 shadow-glow">
+                    <i class="fa-solid fa-file-pdf me-2"></i>Download PDF Report
+                </a>
+                <a href="{{ url_for('scanner.scan') }}" class="btn btn-outline-cyan w-100 fw-semibold mb-2">
+                    <i class="fa-solid fa-rotate-right me-2"></i>Re-scan Website
+                </a>
+                <a href="{{ url_for('reports.reports_page')}}" class="btn btn-outline-cyan w-100 fw-semibold">
+                    <i class="fa-solid fa-arrow-left me-2"></i>Back to Reports
+                </a>
+            </div>
+
+        </div><!-- /.col-lg-4 -->
+    </div><!-- /.row -->
+</div><!-- /.vr-wrapper -->
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="cyber-footer text-center py-4 mt-2">
+    <p class="mb-1 fw-semibold">
+        <i class="fa-solid fa-shield-halved text-cyan me-2"></i>CyberShield AI
+    </p>
+    <p class="text-muted small mb-0">Developed by Aditya Narke</p>
+</footer>
+
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -9,8 +9,9 @@ from models.user import User
 from routes.auth import auth
 from routes.dashboard import dashboard
 from routes.scanner import scanner
-from routes.report import report
+from routes.reports import reports
 from routes.api import api
+from models.scan_history import ScanHistory
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -33,7 +34,7 @@ def load_user(user_id):
 app.register_blueprint(auth)
 app.register_blueprint(dashboard)
 app.register_blueprint(scanner)
-app.register_blueprint(report)
+app.register_blueprint(reports)
 app.register_blueprint(api)
 
 

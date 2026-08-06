@@ -1,0 +1,438 @@
+/* ==========================================================================
+   CYBERSHIELD AI — HISTORY.CSS
+   Page-specific styles for history.html
+   Reuses CSS custom properties from styles.css; no duplicate base rules.
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE HEADER (reuses .sc-page-header pattern from scanner)
+   ========================================================================== */
+
+.sc-page-header {
+  padding: 140px 0 40px;
+  text-align: center;
+}
+
+.sc-page-header .cs-eyebrow {
+  justify-content: center;
+  display: inline-flex;
+  margin-bottom: 22px;
+}
+
+.sc-page-header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 2.6rem;
+  color: #fff;
+  margin-bottom: 14px;
+  letter-spacing: -0.01em;
+}
+
+.sc-page-header p {
+  color: var(--cs-muted);
+  font-size: 1.05rem;
+  font-weight: 300;
+}
+
+/* ==========================================================================
+   STATISTICS CARDS
+   ========================================================================== */
+
+.hs-stats-section { padding: 0 0 40px; }
+
+.hs-stat-card {
+  background: var(--cs-glass);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 18px;
+  padding: 24px 22px;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hs-stat-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(34, 211, 238, 0.3);
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.1);
+}
+
+.hs-stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.hs-icon-cyan  { background: rgba(34, 211, 238, 0.12); border: 1px solid rgba(34, 211, 238, 0.25); color: var(--cs-cyan); }
+.hs-icon-rose  { background: rgba(255, 92, 122, 0.12); border: 1px solid rgba(255, 92, 122, 0.25); color: var(--cs-rose); }
+.hs-icon-green { background: rgba(46, 204, 113, 0.12); border: 1px solid rgba(46, 204, 113, 0.25); color: #2ECC71; }
+.hs-icon-violet{ background: rgba(124, 92, 255, 0.12); border: 1px solid rgba(124, 92, 255, 0.25); color: var(--cs-violet); }
+
+.hs-stat-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+  margin-bottom: 4px;
+  background: var(--cs-gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.hs-stat-label {
+  font-size: 0.82rem;
+  color: var(--cs-muted);
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   SEARCH + TOOLBAR
+   ========================================================================== */
+
+.hs-table-section { padding: 0 0 80px; }
+
+.hs-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+  flex-wrap: wrap;
+}
+
+.hs-search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 220px;
+}
+
+.hs-search-icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--cs-cyan);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+
+.hs-search-input {
+  width: 100%;
+  background: rgba(4, 8, 15, 0.55);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 12px;
+  padding: 12px 16px 12px 42px;
+  color: var(--cs-text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hs-search-input::placeholder { color: var(--cs-muted); }
+
+.hs-search-input:focus {
+  border-color: rgba(34, 211, 238, 0.5);
+  box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.12), 0 0 22px rgba(34, 211, 238, 0.15);
+}
+
+.hs-new-scan-btn { white-space: nowrap; padding: 12px 22px; }
+
+/* ==========================================================================
+   HISTORY TABLE CARD
+   ========================================================================== */
+
+.hs-table-card {
+  background: var(--cs-glass);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+/* Bootstrap table overrides */
+.hs-table-card .table-dark {
+  --bs-table-bg: transparent;
+  --bs-table-border-color: rgba(120, 150, 200, 0.1);
+  --bs-table-hover-bg: rgba(34, 211, 238, 0.04);
+  color: var(--cs-text);
+  margin: 0;
+}
+
+.hs-table-card .table-dark thead th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.73rem;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--cs-muted);
+  font-weight: 500;
+  border-bottom: 1px solid var(--cs-glass-border);
+  padding: 16px 20px;
+  background: rgba(4, 8, 15, 0.35);
+  white-space: nowrap;
+}
+
+.hs-table-card .table-dark tbody td {
+  padding: 16px 20px;
+  font-size: 0.9rem;
+  vertical-align: middle;
+  border-bottom: 1px solid rgba(120, 150, 200, 0.07);
+}
+
+.hs-table-row {
+  transition: background 0.25s ease;
+}
+
+/* Website cell */
+.hs-website-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hs-website-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, rgba(34,211,238,0.12), rgba(124,92,255,0.12));
+  border: 1px solid rgba(34, 211, 238, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cs-cyan);
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.hs-website-url {
+  font-size: 0.88rem;
+  color: var(--cs-text);
+  word-break: break-all;
+}
+
+/* Date */
+.hs-date {
+  font-size: 0.84rem;
+  color: var(--cs-muted);
+}
+
+/* ==========================================================================
+   SCORE RING
+   ========================================================================== */
+
+.hs-score-wrap { display: flex; align-items: center; }
+
+.hs-score-ring {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: conic-gradient(var(--hs-ring-color, var(--cs-cyan)) var(--hs-score, 0%), rgba(255,255,255,0.07) 0%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.hs-score-ring::before {
+  content: '';
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  background: var(--cs-surface);
+}
+
+.hs-score-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #fff;
+  position: relative;
+  z-index: 1;
+}
+
+.hs-ring-green { --hs-ring-color: #2ECC71; box-shadow: 0 0 12px rgba(46, 204, 113, 0.3); }
+.hs-ring-amber { --hs-ring-color: #FFB020; box-shadow: 0 0 12px rgba(255, 176, 32, 0.3); }
+.hs-ring-red   { --hs-ring-color: #FF5C7A; box-shadow: 0 0 12px rgba(255, 92, 122, 0.3); }
+
+/* ==========================================================================
+   RISK BADGES
+   ========================================================================== */
+
+.hs-risk-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+}
+
+.hs-risk-low      { color: #2ECC71; background: rgba(46, 204, 113, 0.1);  border-color: rgba(46, 204, 113, 0.3); }
+.hs-risk-medium   { color: #FFD23F; background: rgba(255, 210, 63, 0.1);  border-color: rgba(255, 210, 63, 0.3); }
+.hs-risk-high     { color: #FF7A45; background: rgba(255, 122, 69, 0.1);  border-color: rgba(255, 122, 69, 0.3); }
+.hs-risk-critical { color: #C084FC; background: rgba(192, 132, 252, 0.1); border-color: rgba(192, 132, 252, 0.3); }
+
+/* ==========================================================================
+   ACTION BUTTONS
+   ========================================================================== */
+
+.hs-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hs-action-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  border: 1px solid var(--cs-glass-border);
+  background: rgba(4, 8, 15, 0.4);
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.hs-view-btn     { color: var(--cs-cyan);   }
+.hs-download-btn { color: var(--cs-violet); }
+.hs-delete-btn   { color: var(--cs-rose);   }
+
+.hs-view-btn:hover {
+  background: rgba(34, 211, 238, 0.15);
+  border-color: rgba(34, 211, 238, 0.4);
+  color: var(--cs-cyan);
+  box-shadow: 0 0 14px rgba(34, 211, 238, 0.25);
+  transform: translateY(-1px);
+}
+
+.hs-download-btn:hover {
+  background: rgba(124, 92, 255, 0.15);
+  border-color: rgba(124, 92, 255, 0.4);
+  color: var(--cs-violet);
+  box-shadow: 0 0 14px rgba(124, 92, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.hs-delete-btn:hover {
+  background: rgba(255, 92, 122, 0.15);
+  border-color: rgba(255, 92, 122, 0.4);
+  color: var(--cs-rose);
+  box-shadow: 0 0 14px rgba(255, 92, 122, 0.25);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   EMPTY / NO RESULTS STATES
+   ========================================================================== */
+
+.hs-empty-state {
+  text-align: center;
+  padding: 70px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hs-empty-icon {
+  font-size: 3rem;
+  color: var(--cs-muted);
+  opacity: 0.4;
+  margin-bottom: 22px;
+  display: block;
+  animation: hs-idle 3.5s ease-in-out infinite;
+}
+
+@keyframes hs-idle {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.06); opacity: 0.65; }
+}
+
+.hs-empty-state h3 {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.hs-empty-state p {
+  color: var(--cs-muted);
+  font-size: 0.95rem;
+  font-weight: 300;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.hs-no-results {
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 50px 24px;
+  color: var(--cs-muted);
+  gap: 14px;
+}
+
+.hs-no-results i { font-size: 2rem; opacity: 0.4; }
+.hs-no-results p { font-size: 0.94rem; margin: 0; }
+
+/* ==========================================================================
+   FOOTER ROW (total scans counter)
+   ========================================================================== */
+
+.hs-footer-row {
+  margin-top: 18px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hs-count {
+  font-size: 0.8rem;
+  color: var(--cs-muted);
+}
+
+.hs-count strong { color: var(--cs-cyan); }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 991px) {
+  .sc-page-header { padding: 130px 0 30px; }
+  .sc-page-header h1 { font-size: 2rem; }
+}
+
+@media (max-width: 767px) {
+  .hs-stat-card { flex-direction: column; text-align: center; padding: 20px 16px; }
+  .hs-toolbar { flex-direction: column; align-items: stretch; }
+  .hs-new-scan-btn { width: 100%; text-align: center; display: flex; justify-content: center; }
+  .hs-table-card .table-dark thead th,
+  .hs-table-card .table-dark tbody td { padding: 12px 14px; }
+  .hs-actions { gap: 6px; }
+}
+
+@media (max-width: 576px) {
+  .sc-page-header h1 { font-size: 1.7rem; }
+  .hs-stat-value { font-size: 1.6rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hs-empty-icon,
+  .hs-stat-card,
+  .hs-action-btn,
+  .hs-table-row { animation: none !important; transition: none !important; }
+}

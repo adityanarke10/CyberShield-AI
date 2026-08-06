@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scan History — CyberShield AI</title>
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<!-- Bootstrap 5 -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<!-- Project Styles -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/history.css') }}">
+</head>
+<body>
+
+<!-- Background layers -->
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar navbar-expand-lg fixed-top cs-navbar cs-navbar-scrolled" id="csNavbar">
+  <div class="container">
+    <a class="navbar-brand cs-brand" href="{{ url_for('dashboard.index') }}">
+      <span class="cs-brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+      CyberShield <span class="cs-brand-accent">AI</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#csNavContent" aria-controls="csNavContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars text-white" aria-hidden="true"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="csNavContent">
+      <ul class="navbar-nav mx-auto cs-nav-links">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('scanner.scan') }}">Scanner</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">History</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('reports.reports_page') }}">Reports</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+      </ul>
+      <div class="d-flex cs-nav-actions">
+        <a href="{{ url_for('auth.logout') }}" class="btn cs-btn-outline">
+          <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ PAGE HEADER ============ -->
+<section class="sc-page-header">
+  <div class="container">
+    <div class="cs-eyebrow"><span class="cs-dot"></span> SCAN HISTORY</div>
+    <h1>Assessment History</h1>
+    <p>Review all past security assessments and download reports.</p>
+  </div>
+</section>
+
+<!-- ============ STATISTICS CARDS ============ -->
+<section class="hs-stats-section">
+  <div class="container">
+    <div class="row g-4">
+
+      <div class="col-6 col-lg-3">
+        <div class="hs-stat-card">
+          <div class="hs-stat-icon hs-icon-cyan">
+            <i class="fa-solid fa-globe"></i>
+          </div>
+          <div class="hs-stat-body">
+            <div class="hs-stat-value">{{ scans | length }}</div>
+            <div class="hs-stat-label">Total Scans</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <div class="hs-stat-card">
+          <div class="hs-stat-icon hs-icon-rose">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+          </div>
+          <div class="hs-stat-body">
+            <div class="hs-stat-value">
+              {{ scans | selectattr('risk_level', 'in', ['High', 'Critical']) | list | length }}
+            </div>
+            <div class="hs-stat-label">High / Critical Risk</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <div class="hs-stat-card">
+          <div class="hs-stat-icon hs-icon-green">
+            <i class="fa-solid fa-shield-halved"></i>
+          </div>
+          <div class="hs-stat-body">
+            <div class="hs-stat-value">
+              {{ scans | selectattr('risk_level', 'equalto', 'Low') | list | length }}
+            </div>
+            <div class="hs-stat-label">Low Risk</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 col-lg-3">
+        <div class="hs-stat-card">
+          <div class="hs-stat-icon hs-icon-violet">
+            <i class="fa-solid fa-gauge-high"></i>
+          </div>
+          <div class="hs-stat-body">
+            <div class="hs-stat-value">
+              {% if scans %}
+                {% set total = namespace(val=0) %}
+                {% for scan in scans %}{% set total.val = total.val + scan.security_score %}{% endfor %}
+                {{ (total.val / scans | length) | round(0) | int }}
+              {% else %}0{% endif %}
+            </div>
+            <div class="hs-stat-label">Average Score</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEARCH + TABLE ============ -->
+<section class="hs-table-section">
+  <div class="container">
+
+    <!-- Search bar -->
+    <div class="hs-toolbar">
+      <div class="hs-search-wrap">
+        <i class="fa-solid fa-magnifying-glass hs-search-icon"></i>
+        <input
+          type="text"
+          id="hsSearch"
+          class="hs-search-input"
+          placeholder="Search by website or risk level…"
+          autocomplete="off"
+        >
+      </div>
+      <a href="{{ url_for('scanner.scan') }}" class="btn cs-btn-glow hs-new-scan-btn">
+        <i class="fa-solid fa-plus me-2"></i>New Scan
+      </a>
+    </div>
+
+    <!-- History table -->
+    <div class="hs-table-card">
+      {% if scans %}
+      <div class="table-responsive">
+        <table class="table table-dark table-hover align-middle mb-0" id="hsTable">
+          <thead>
+            <tr>
+              <th><i class="fa-solid fa-globe me-2"></i>Website</th>
+              <th><i class="fa-solid fa-gauge-high me-2"></i>Score</th>
+              <th><i class="fa-solid fa-triangle-exclamation me-2"></i>Risk</th>
+              <th><i class="fa-solid fa-calendar me-2"></i>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for scan in scans %}
+            <tr class="hs-table-row">
+              <td>
+                <div class="hs-website-cell">
+                  <div class="hs-website-icon">
+                    <i class="fa-solid fa-globe"></i>
+                  </div>
+                  <span class="mono hs-website-url">{{ scan.website }}</span>
+                </div>
+              </td>
+              <td>
+                <div class="hs-score-wrap">
+                  <div class="hs-score-ring
+                    {% if scan.security_score >= 80 %}hs-ring-green
+                    {% elif scan.security_score >= 50 %}hs-ring-amber
+                    {% else %}hs-ring-red{% endif %}"
+                    style="--hs-score: {{ scan.security_score }}%;">
+                    <span class="hs-score-num">{{ scan.security_score }}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="hs-risk-badge
+                  {% if scan.risk_level == 'Low' %}hs-risk-low
+                  {% elif scan.risk_level == 'Medium' %}hs-risk-medium
+                  {% elif scan.risk_level == 'High' %}hs-risk-high
+                  {% elif scan.risk_level == 'Critical' %}hs-risk-critical
+                  {% else %}hs-risk-medium{% endif %}">
+                  {% if scan.risk_level == 'Low' %}<i class="fa-solid fa-circle-check me-1"></i>
+                  {% elif scan.risk_level == 'Medium' %}<i class="fa-solid fa-triangle-exclamation me-1"></i>
+                  {% elif scan.risk_level == 'High' %}<i class="fa-solid fa-fire me-1"></i>
+                  {% elif scan.risk_level == 'Critical' %}<i class="fa-solid fa-skull-crossbones me-1"></i>
+                  {% else %}<i class="fa-solid fa-circle me-1"></i>{% endif %}
+                  {{ scan.risk_level }}
+                </span>
+              </td>
+              <td>
+                <span class="mono hs-date">{{ scan.scan_date.strftime("%d %b %Y %I:%M %p") }}</span>
+              </td>
+              <td>
+                <div class="hs-actions">
+                  <a href="#" class="hs-action-btn hs-view-btn" title="View Report">
+                    <i class="fa-solid fa-eye"></i>
+                  </a>
+                  <a href="#" class="hs-action-btn hs-download-btn" title="Download PDF">
+                    <i class="fa-solid fa-file-pdf"></i>
+                  </a>
+                  <a href="{{ url_for('dashboard.delete_scan', id=scan.id) }}"
+   class="hs-action-btn hs-delete-btn"
+   title="Delete"
+   onclick="return confirm('Are you sure you want to delete this scan?')">
+                    <i class="fa-solid fa-trash"></i>
+                  </a>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- No results message (shown by JS when search yields nothing) -->
+      <div class="hs-no-results" id="hsNoResults" style="display:none;">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <p>No scans match your search.</p>
+      </div>
+
+      {% else %}
+
+      <!-- Empty state (no scans in DB) -->
+      <div class="hs-empty-state">
+        <i class="fa-solid fa-satellite-dish hs-empty-icon"></i>
+        <h3>No Scans Yet</h3>
+        <p>You haven't run any security assessments. Start your first scan below.</p>
+        <a href="{{ url_for('scanner.scan') }}" class="btn cs-btn-glow mt-3">
+          <i class="fa-solid fa-bolt me-2"></i>Start First Scan
+        </a>
+      </div>
+
+      {% endif %}
+    </div>
+
+    <!-- Total scans counter -->
+    {% if scans %}
+    <div class="hs-footer-row">
+      <span class="mono hs-count">
+        <i class="fa-solid fa-list me-2"></i>
+        Showing <strong>{{ scans | length }}</strong> scan{{ 's' if scans | length != 1 else '' }}
+      </span>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="cs-footer">
+  <div class="container">
+    <div class="cs-footer-center">
+      <a class="navbar-brand cs-brand" href="{{ url_for('dashboard.index') }}">
+        <span class="cs-brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        CyberShield <span class="cs-brand-accent">AI</span>
+      </a>
+      <p class="cs-footer-about">Developed by Aditya Narke</p>
+    </div>
+    <hr class="cs-footer-divider">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center cs-footer-bottom">
+      <p class="mb-0">© 2026 CyberShield AI</p>
+      <p class="mb-0"><i class="fa-solid fa-circle cs-status-dot" aria-hidden="true"></i> All systems operational</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Frontend-only search filter -->
+<script>
+(function () {
+  var input = document.getElementById('hsSearch');
+  var table = document.getElementById('hsTable');
+  var noResults = document.getElementById('hsNoResults');
+  if (!input || !table) return;
+
+  input.addEventListener('input', function () {
+    var q = input.value.toLowerCase().trim();
+    var rows = table.querySelectorAll('tbody .hs-table-row');
+    var visible = 0;
+
+    rows.forEach(function (row) {
+      var text = row.innerText.toLowerCase();
+      if (text.indexOf(q) > -1) {
+        row.style.display = '';
+        visible++;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+
+    if (noResults) {
+      noResults.style.display = visible === 0 ? 'flex' : 'none';
+    }
+  });
+}());
+</script>
+
+</body>
+</html>
