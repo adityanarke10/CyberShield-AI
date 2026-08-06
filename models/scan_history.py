@@ -1,5 +1,9 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 from models import db
+
+
+def ist_now():
+    return datetime.utcnow() + timedelta(hours=5, minutes=30)
 
 
 class ScanHistory(db.Model):
@@ -16,5 +20,5 @@ class ScanHistory(db.Model):
 
     scan_date = db.Column(
         db.DateTime,
-        default=datetime.utcnow
+        default=ist_now
     )
