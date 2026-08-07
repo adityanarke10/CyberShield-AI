@@ -47,7 +47,7 @@
         <li class="nav-item"><a class="nav-link" href="{{ url_for('scanner.scan') }}">Scanner</a></li>
         <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.history') }}">History</a></li>
         <li class="nav-item"><a class="nav-link active" href="{{ url_for('reports.reports_page') }}">Reports</a></li>
-        <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+        <li class="nav-item"><a class="nav-link"href="{{ url_for('profile.profile_page') }}">Profile</a></li>
       </ul>
       <div class="d-flex cs-nav-actions">
         <a href="{{ url_for('auth.logout') }}" class="btn cs-btn-outline">

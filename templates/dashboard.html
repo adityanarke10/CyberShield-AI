@@ -59,10 +59,11 @@
                 </li>
                 <!-- Profile route not implemented yet - temporary placeholder -->
                 <li class="nav-item">
-                    <a class="nav-link" href="#">
-                        <i class="fa-solid fa-user-shield me-1"></i> Profile
-                    </a>
-                </li>
+    <a class="nav-link" href="{{ url_for('profile.profile_page') }}">
+        <i class="fa-solid fa-user-shield me-1"></i>
+        Profile
+    </a>
+</li>
                 <li class="nav-item ms-lg-2">
                     <a class="btn btn-outline-cyan btn-sm px-3" href="{{ url_for('auth.logout') }}">
                         <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
@@ -100,7 +101,7 @@
                 <div class="stat-icon bg-cyan-soft mb-3">
                     <i class="fa-solid fa-globe"></i>
                 </div>
-                <h2 class="fw-bold mb-1">{{ total_scans|default(128) }}</h2>
+                <h2 class="fw-bold mb-1">{{ total_scans }}</h2>
                 <p class="text-muted mb-0">Total Scans</p>
             </div>
         </div>
@@ -109,7 +110,7 @@
                 <div class="stat-icon bg-danger-soft mb-3">
                     <i class="fa-solid fa-triangle-exclamation"></i>
                 </div>
-                <h2 class="fw-bold mb-1">{{ high_risk_count|default(14) }}</h2>
+                <h2 class="fw-bold mb-1">{{ high_risk }}</h2>
                 <p class="text-muted mb-0">High Risk Websites</p>
             </div>
         </div>
@@ -118,7 +119,7 @@
                 <div class="stat-icon bg-success-soft mb-3">
                     <i class="fa-solid fa-shield-halved"></i>
                 </div>
-                <h2 class="fw-bold mb-1">{{ protected_count|default(96) }}</h2>
+                <h2 class="fw-bold mb-1">{{ protected }}</h2>
                 <p class="text-muted mb-0">Protected Websites</p>
             </div>
         </div>
@@ -127,7 +128,7 @@
                 <div class="stat-icon bg-cyan-soft mb-3">
                     <i class="fa-solid fa-file-pdf"></i>
                 </div>
-                <h2 class="fw-bold mb-1">{{ reports_count|default(52) }}</h2>
+                <h2 class="fw-bold mb-1">{{ reports_generated }}</h2>
                 <p class="text-muted mb-0">Reports Generated</p>
             </div>
         </div>
