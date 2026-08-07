@@ -446,7 +446,7 @@
             {% endif %}
           </div>
           <div class="sc-ai-actions">
-            <a href="#" class="btn cs-btn-glow">
+            <a href="{{ url_for('reports.download_report', id=scan.id) }}"  class="btn cs-btn-glow">
               <i class="fa-solid fa-file-pdf me-2"></i>Download PDF Report
             </a>
           </div>

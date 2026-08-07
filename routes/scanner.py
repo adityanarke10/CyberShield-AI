@@ -62,6 +62,7 @@ def scan():
 
             db.session.add(history)
             db.session.commit()
+            scan = history
 
         except Exception as e:
 
@@ -76,5 +77,6 @@ def scan():
         ssl_info=ssl_info,
         technologies=technologies,
         cookies=cookies,
-        security_score=security_score
+        security_score=security_score,
+    scan = scan
     )
