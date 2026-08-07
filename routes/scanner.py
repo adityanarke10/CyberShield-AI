@@ -1,5 +1,5 @@
+from flask_login import current_user
 from flask import Blueprint, render_template, request
-
 from models.scan_history import ScanHistory
 from models import db
 
@@ -52,11 +52,12 @@ def scan():
                 ssl_info,
                 cookies
             )
-            
+
             history = ScanHistory(
                 website=result["url"],
                 security_score=security_score["score"],
-                risk_level=security_score["risk"]
+                risk_level=security_score["risk"],
+                user_id=current_user.id
             )
 
             db.session.add(history)

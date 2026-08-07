@@ -1,0 +1,705 @@
+/* ==========================================================================
+   CYBERSHIELD AI — PROFILE.CSS
+   Inherits CSS custom properties from styles.css.
+   Prefix: pf- (profile)
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE HEADER
+   ========================================================================== */
+
+.pf-page-header {
+  padding: 140px 0 36px;
+  text-align: center;
+}
+
+.pf-page-header .cs-eyebrow {
+  justify-content: center;
+  display: inline-flex;
+  margin-bottom: 20px;
+}
+
+.pf-page-header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 2.5rem;
+  color: #fff;
+  margin-bottom: 12px;
+  letter-spacing: -0.01em;
+}
+
+.pf-page-header p {
+  color: var(--cs-muted);
+  font-size: 1rem;
+  font-weight: 300;
+}
+
+.pf-main-container { padding-bottom: 80px; }
+
+/* ==========================================================================
+   BASE CARD
+   ========================================================================== */
+
+.pf-card {
+  background: var(--cs-glass);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 20px;
+  overflow: visible;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pf-card:hover {
+  border-color: rgba(34, 211, 238, 0.22);
+  box-shadow: 0 20px 56px rgba(0, 0, 0, 0.4), 0 0 40px rgba(34, 211, 238, 0.06);
+}
+
+.pf-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 22px;
+  border-bottom: 1px solid var(--cs-glass-border);
+  background: rgba(4, 8, 15, 0.32);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.pf-card-header i { color: var(--cs-cyan); font-size: 0.95rem; }
+
+.pf-card-header-split {
+  justify-content: space-between;
+}
+
+/* ==========================================================================
+   IDENTITY CARD
+   ========================================================================== */
+
+.pf-identity-card {
+    position: relative;
+    padding-top: 30px;
+    padding-bottom: 0;
+}
+
+.pf-identity-glow {
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 260px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(34, 211, 238, 0.18), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pf-avatar-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto 20px;
+    position: relative;
+}
+
+.pf-avatar {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: var(--cs-gradient-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #06121a;
+    box-shadow: 0 0 25px rgba(59, 130, 246, 0.35);
+}
+
+.pf-avatar-ring {
+  position: absolute;
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background: var(--cs-gradient-primary) border-box;
+  -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: destination-out;
+  mask-composite: exclude;
+  animation: pf-ring-spin 6s linear infinite;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes pf-ring-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+.pf-identity-info {
+  text-align: center;
+  padding: 22px 24px 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.pf-name {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 6px;
+}
+
+.pf-email {
+  font-size: 0.84rem;
+  color: var(--cs-muted);
+  margin-bottom: 14px;
+  word-break: break-all;
+}
+
+.pf-role-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--cs-cyan);
+  background: rgba(34, 211, 238, 0.1);
+  border: 1px solid rgba(34, 211, 238, 0.28);
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.pf-identity-meta {
+  margin: 14px 22px 0;
+  border-top: 1px solid var(--cs-glass-border);
+  padding-top: 14px;
+}
+
+.pf-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+}
+
+.pf-meta-row:last-child { border-bottom: none; }
+
+.pf-meta-key {
+  font-size: 0.82rem;
+  color: var(--cs-muted);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pf-meta-key i { color: var(--cs-cyan); width: 14px; text-align: center; }
+
+.pf-meta-val {
+  font-size: 0.82rem;
+  color: var(--cs-text);
+  font-weight: 500;
+}
+
+.pf-status-active {
+  color: #2ECC71;
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pf-status-active::before {
+  content: '';
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2ECC71;
+  box-shadow: 0 0 8px #2ECC71;
+  animation: pf-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pf-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.pf-identity-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 22px 24px;
+}
+
+.pf-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.pf-btn-primary {
+  background: var(--cs-gradient-primary);
+  color: #06121a;
+  box-shadow: 0 0 18px rgba(34, 211, 238, 0.3);
+}
+
+.pf-btn-primary:hover {
+  box-shadow: 0 0 30px rgba(34, 211, 238, 0.5), 0 0 50px rgba(124, 92, 255, 0.3);
+  transform: translateY(-2px);
+  color: #06121a;
+}
+
+.pf-btn-secondary {
+  background: rgba(124, 92, 255, 0.12);
+  border-color: rgba(124, 92, 255, 0.3);
+  color: var(--cs-violet);
+}
+
+.pf-btn-secondary:hover {
+  background: rgba(124, 92, 255, 0.22);
+  border-color: rgba(124, 92, 255, 0.5);
+  box-shadow: 0 0 22px rgba(124, 92, 255, 0.25);
+  transform: translateY(-2px);
+  color: var(--cs-violet);
+}
+
+.pf-btn-danger {
+  background: rgba(255, 92, 122, 0.1);
+  border-color: rgba(255, 92, 122, 0.28);
+  color: var(--cs-rose);
+}
+
+.pf-btn-danger:hover {
+  background: rgba(255, 92, 122, 0.2);
+  border-color: rgba(255, 92, 122, 0.5);
+  box-shadow: 0 0 22px rgba(255, 92, 122, 0.25);
+  transform: translateY(-2px);
+  color: var(--cs-rose);
+}
+
+/* ==========================================================================
+   ACCOUNT SECURITY CARD
+   ========================================================================== */
+
+.pf-security-list { padding: 6px 0; }
+
+.pf-security-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 22px;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.06);
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.pf-security-row:last-child { border-bottom: none; }
+
+.pf-security-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--cs-muted);
+}
+
+.pf-sec-icon { color: var(--cs-cyan); width: 14px; text-align: center; }
+
+.pf-security-status {
+  font-size: 0.8rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pf-sec-ok { color: #2ECC71; }
+
+.pf-security-val {
+  font-size: 0.8rem;
+  color: var(--cs-text);
+}
+
+/* ==========================================================================
+   QUICK ACTIONS CARD
+   ========================================================================== */
+
+.pf-quick-list { display: flex; flex-direction: column; padding: 8px 0; }
+
+.pf-quick-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 22px;
+  text-decoration: none;
+  color: var(--cs-text);
+  font-size: 0.92rem;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pf-quick-btn::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--pf-quick-accent, var(--cs-cyan));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.pf-quick-btn:hover::before { opacity: 1; }
+
+.pf-quick-btn:last-child { border-bottom: none; }
+
+.pf-quick-btn i:first-child {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.95rem;
+  background: var(--pf-quick-bg, rgba(34, 211, 238, 0.1));
+  border: 1px solid var(--pf-quick-border, rgba(34, 211, 238, 0.2));
+  color: var(--pf-quick-accent, var(--cs-cyan));
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+}
+
+.pf-quick-btn:hover i:first-child { transform: scale(1.1); }
+
+.pf-quick-btn:hover {
+  background: rgba(255, 255, 255, 0.025);
+  color: #fff;
+}
+
+.pf-quick-arrow {
+  margin-left: auto;
+  font-size: 0.75rem;
+  color: var(--cs-muted);
+  transition: transform 0.25s ease, color 0.25s ease;
+}
+
+.pf-quick-btn:hover .pf-quick-arrow {
+  transform: translateX(4px);
+  color: var(--pf-quick-accent, var(--cs-cyan));
+}
+
+.pf-quick-scan   { --pf-quick-accent: var(--cs-cyan);   --pf-quick-bg: rgba(34,211,238,0.1);  --pf-quick-border: rgba(34,211,238,0.2); }
+.pf-quick-reports{ --pf-quick-accent: var(--cs-violet);  --pf-quick-bg: rgba(124,92,255,0.1); --pf-quick-border: rgba(124,92,255,0.2); }
+.pf-quick-dash   { --pf-quick-accent: #2ECC71;           --pf-quick-bg: rgba(46,204,113,0.1);  --pf-quick-border: rgba(46,204,113,0.2); }
+.pf-quick-logout { --pf-quick-accent: var(--cs-rose);    --pf-quick-bg: rgba(255,92,122,0.1);  --pf-quick-border: rgba(255,92,122,0.2); }
+
+/* ==========================================================================
+   STATISTICS TILES
+   ========================================================================== */
+
+.pf-stats-card .pf-card-header { border-radius: 0; }
+.pf-stats-grid { padding: 20px; }
+
+.pf-stat-tile {
+  position: relative;
+  background: rgba(4, 8, 15, 0.45);
+  border: 1px solid var(--pf-tile-border, var(--cs-glass-border));
+  border-radius: 16px;
+  padding: 24px 18px;
+  text-align: center;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.pf-stat-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 0 30px var(--pf-tile-glow, rgba(34, 211, 238, 0.15));
+}
+
+.pf-stat-tile-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  font-size: 1.3rem;
+  background: var(--pf-tile-icon-bg);
+  border: 1px solid var(--pf-tile-border);
+  color: var(--pf-tile-color);
+}
+
+.pf-stat-tile-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--pf-tile-color);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.pf-stat-tile-label {
+  font-size: 0.78rem;
+  color: var(--cs-muted);
+  font-weight: 400;
+}
+
+.pf-stat-tile-glow {
+  position: absolute;
+  bottom: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--pf-tile-color);
+  filter: blur(40px);
+  opacity: 0.12;
+  pointer-events: none;
+}
+
+/* Tile color variants */
+.pf-tile-cyan   { --pf-tile-color: var(--cs-cyan);   --pf-tile-border: rgba(34,211,238,0.22);  --pf-tile-icon-bg: rgba(34,211,238,0.1);  --pf-tile-glow: rgba(34,211,238,0.15); }
+.pf-tile-violet { --pf-tile-color: var(--cs-violet);  --pf-tile-border: rgba(124,92,255,0.22); --pf-tile-icon-bg: rgba(124,92,255,0.1); --pf-tile-glow: rgba(124,92,255,0.15); }
+.pf-tile-green  { --pf-tile-color: #2ECC71;            --pf-tile-border: rgba(46,204,113,0.22);  --pf-tile-icon-bg: rgba(46,204,113,0.1);  --pf-tile-glow: rgba(46,204,113,0.15); }
+.pf-tile-rose   { --pf-tile-color: var(--cs-rose);    --pf-tile-border: rgba(255,92,122,0.22);  --pf-tile-icon-bg: rgba(255,92,122,0.1);  --pf-tile-glow: rgba(255,92,122,0.15); }
+
+/* ==========================================================================
+   LIVE BADGE
+   ========================================================================== */
+
+.pf-live-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--cs-cyan);
+}
+
+/* ==========================================================================
+   ACTIVITY TIMELINE
+   ========================================================================== */
+
+.pf-timeline {
+  padding: 20px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.pf-timeline-item {
+  display: grid;
+  grid-template-columns: 20px 2px 1fr;
+  gap: 0 14px;
+  padding-bottom: 20px;
+}
+
+.pf-timeline-item:last-child { padding-bottom: 0; }
+.pf-timeline-item:last-child .pf-timeline-line { display: none; }
+
+.pf-timeline-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  margin-top: 4px;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px currentColor;
+  animation: pf-pulse 2s ease-in-out infinite;
+}
+
+.pf-dot-green  { background: #2ECC71; color: #2ECC71; }
+.pf-dot-amber  { background: #FFB020; color: #FFB020; }
+.pf-dot-red    { background: #FF5C7A; color: #FF5C7A; }
+.pf-dot-purple { background: #C084FC; color: #C084FC; }
+
+.pf-timeline-line {
+  width: 2px;
+  background: linear-gradient(180deg, var(--cs-glass-border), transparent);
+  margin: 18px auto 0;
+  grid-row: span 1;
+}
+
+.pf-timeline-card {
+  background: rgba(4, 8, 15, 0.4);
+  border: 1px solid var(--cs-glass-border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.pf-timeline-card:hover {
+  border-color: rgba(34, 211, 238, 0.28);
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.08);
+}
+
+.pf-timeline-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.pf-timeline-site {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--cs-text);
+  font-weight: 500;
+  min-width: 0;
+}
+
+.pf-timeline-site i { color: var(--cs-cyan); flex-shrink: 0; }
+
+.pf-timeline-site span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Bootstrap badge colour overrides */
+.pf-risk-badge { font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; padding: 5px 10px; }
+.pf-badge-warning { background-color: #FFB020 !important; color: #06121a; }
+.pf-badge-critical { background-color: #C084FC !important; color: #06121a; }
+
+.pf-timeline-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.pf-timeline-score {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.pf-mini-bar {
+  width: 80px;
+  height: 5px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.pf-mini-fill {
+  display: block;
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pf-fill-green { background: #2ECC71; }
+.pf-fill-amber { background: #FFB020; }
+.pf-fill-red   { background: #FF5C7A; }
+
+.pf-score-num {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--cs-text);
+}
+
+.pf-score-num small {
+  font-size: 0.68rem;
+  color: var(--cs-muted);
+}
+
+.pf-timeline-date {
+  font-size: 0.76rem;
+  color: var(--cs-muted);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.pf-timeline-date i { color: var(--cs-violet); font-size: 0.7rem; }
+
+/* Activity empty state */
+.pf-activity-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 50px 24px;
+  gap: 10px;
+  color: var(--cs-muted);
+}
+
+.pf-empty-icon {
+  font-size: 2.8rem;
+  opacity: 0.35;
+  animation: pf-idle 3.5s ease-in-out infinite;
+}
+
+@keyframes pf-idle {
+  0%, 100% { transform: scale(1); opacity: 0.35; }
+  50% { transform: scale(1.06); opacity: 0.55; }
+}
+
+.pf-activity-empty p { font-size: 0.9rem; margin: 0; }
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+
+@media (max-width: 991px) {
+  .pf-page-header { padding: 130px 0 28px; }
+  .pf-page-header h1 { font-size: 2rem; }
+}
+
+@media (max-width: 767px) {
+  .pf-stats-grid { padding: 14px; }
+  .pf-stat-tile-num { font-size: 1.8rem; }
+  .pf-timeline { padding: 14px 16px; }
+  .pf-quick-btn { padding: 14px 16px; }
+  .pf-identity-actions { padding: 16px 16px 20px; }
+  .pf-identity-meta { margin: 12px 16px 0; }
+  .pf-security-row { padding: 12px 16px; }
+}
+
+@media (max-width: 576px) {
+  .pf-page-header h1 { font-size: 1.7rem; }
+  .pf-avatar { width: 80px; height: 80px; font-size: 1.6rem; }
+  .pf-avatar-ring { width: 96px; height: 96px; }
+  .pf-stat-tile { padding: 18px 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-avatar-ring,
+  .pf-stat-tile,
+  .pf-action-btn,
+  .pf-quick-btn,
+  .pf-timeline-dot,
+  .pf-empty-icon,
+  .pf-timeline-card { animation: none !important; transition: none !important; }
+}

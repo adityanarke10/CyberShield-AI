@@ -12,6 +12,8 @@ from routes.scanner import scanner
 from routes.reports import reports
 from routes.api import api
 from models.scan_history import ScanHistory
+from routes.profile import profile
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -36,6 +38,7 @@ app.register_blueprint(dashboard)
 app.register_blueprint(scanner)
 app.register_blueprint(reports)
 app.register_blueprint(api)
+app.register_blueprint(profile)
 
 
 @app.route("/")

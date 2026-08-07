@@ -1,10 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile — CyberShield AI</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
 </head>
 <body>
 
+<div class="bg-grid"></div>
+<div class="bg-glow bg-glow-1"></div>
+<div class="bg-glow bg-glow-2"></div>
+
+<!-- ============ NAVBAR ============ -->
+<nav class="navbar navbar-expand-lg fixed-top cs-navbar cs-navbar-scrolled">
+  <div class="container">
+    <a class="navbar-brand cs-brand" href="{{ url_for('dashboard.index') }}">
+      <span class="cs-brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+      CyberShield <span class="cs-brand-accent">AI</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+      data-bs-target="#csNavContent" aria-controls="csNavContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars text-white"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="csNavContent">
+      <ul class="navbar-nav mx-auto cs-nav-links">
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard.index') }}">Dashboard</a></li>
+        <li class="nav-item"><a class="nav-link" href="{{ url_for('scanner.scan') }}">Scanner</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">History</a></li>
+        <li class="nav-item"><a class="nav-link" href="#">Reports</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">Profile</a></li>
+      </ul>
+      <div class="d-flex cs-nav-actions">
+        <a href="{{ url_for('auth.logout') }}" class="btn cs-btn-outline">
+          <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
+        </a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ PAGE HEADER ============ -->
+<section class="pf-page-header">
+  <div class="container">
+    <div class="cs-eyebrow"><span class="cs-dot"></span> USER PROFILE</div>
+    <h1>My Profile</h1>
+    <p>Manage your account, view statistics and track your security activity.</p>
+  </div>
+</section>
+
+<div class="container pf-main-container">
+  <div class="row g-4">
+
+    <!-- ============================
+         LEFT COLUMN — Profile Card
+         ============================ -->
+    <div class="col-lg-4">
+
+      <!-- Profile Identity Card -->
+      <div class="pf-card pf-identity-card">
+        <div class="pf-identity-glow"></div>
+
+        <!-- Avatar -->
+        <div class="pf-avatar-wrap">
+          <div class="pf-avatar">
+            {% if current_user.full_name %}
+              {{ current_user.full_name[0] | upper }}{% if current_user.full_name.split()|length > 1 %}{{ current_user.full_name.split()[-1][0] | upper }}{% endif %}
+            {% else %}
+              <i class="fa-solid fa-user"></i>
+            {% endif %}
+          </div>
+          <div class="pf-avatar-ring"></div>
+        </div>
+
+        <!-- Identity Info -->
+        <div class="pf-identity-info">
+          <h2 class="pf-name">{{ current_user.full_name or 'CyberShield User' }}</h2>
+          <p class="pf-email mono">{{ current_user.email or '—' }}</p>
+          <span class="pf-role-badge">
+            <i class="fa-solid fa-shield-halved me-1"></i>CyberShield User
+          </span>
+        </div>
+
+        <!-- Meta -->
+        <div class="pf-identity-meta">
+          <div class="pf-meta-row">
+            <span class="pf-meta-key"><i class="fa-solid fa-calendar-days"></i> Member Since</span>
+            <span class="pf-meta-val mono">
+              {% if current_user.created_at %}
+                {{ current_user.created_at.strftime('%b %d, %Y') }}
+              {% else %}—{% endif %}
+            </span>
+          </div>
+          <div class="pf-meta-row">
+            <span class="pf-meta-key"><i class="fa-solid fa-circle-check"></i> Status</span>
+            <span class="pf-meta-val pf-status-active">Active</span>
+          </div>
+        </div>
+
+        <!-- Profile Actions -->
+        <div class="pf-identity-actions">
+          <a href="#" class="pf-action-btn pf-btn-primary">
+            <i class="fa-solid fa-pen-to-square me-2"></i>Edit Profile
+          </a>
+          <a href="#" class="pf-action-btn pf-btn-secondary">
+            <i class="fa-solid fa-key me-2"></i>Change Password
+          </a>
+          <a href="{{ url_for('auth.logout') }}" class="pf-action-btn pf-btn-danger">
+            <i class="fa-solid fa-right-from-bracket me-2"></i>Logout
+          </a>
+        </div>
+      </div>
+
+      <!-- Account Security Card -->
+      <div class="pf-card pf-security-card mt-4">
+        <div class="pf-card-header">
+          <i class="fa-solid fa-lock"></i>
+          <span>Account Security</span>
+        </div>
+        <div class="pf-security-list">
+          <div class="pf-security-row">
+            <div class="pf-security-label">
+              <i class="fa-solid fa-key pf-sec-icon"></i>
+              Password Status
+            </div>
+            <span class="pf-security-status pf-sec-ok">
+              <i class="fa-solid fa-circle-check"></i> Strong
+            </span>
+          </div>
+          <div class="pf-security-row">
+            <div class="pf-security-label">
+              <i class="fa-solid fa-envelope pf-sec-icon"></i>
+              Email
+            </div>
+            <span class="pf-security-status pf-sec-ok">
+              <i class="fa-solid fa-circle-check"></i> Verified
+            </span>
+          </div>
+          <div class="pf-security-row">
+            <div class="pf-security-label">
+              <i class="fa-solid fa-calendar pf-sec-icon"></i>
+              Account Created
+            </div>
+            <span class="pf-security-val mono">
+              {% if current_user.created_at %}
+                {{ current_user.created_at.strftime('%d %b %Y') }}
+              {% else %}—{% endif %}
+            </span>
+          </div>
+          <div class="pf-security-row">
+            <div class="pf-security-label">
+              <i class="fa-solid fa-clock pf-sec-icon"></i>
+              Last Login
+            </div>
+            <span class="pf-security-val mono">Just now</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Card -->
+      <div class="pf-card pf-quick-card mt-4">
+        <div class="pf-card-header">
+          <i class="fa-solid fa-bolt"></i>
+          <span>Quick Actions</span>
+        </div>
+        <div class="pf-quick-list">
+          <a href="{{ url_for('scanner.scan') }}" class="pf-quick-btn pf-quick-scan">
+            <i class="fa-solid fa-magnifying-glass-chart"></i>
+            <span>Start New Scan</span>
+            <i class="fa-solid fa-arrow-right pf-quick-arrow"></i>
+          </a>
+          <a href="#" class="pf-quick-btn pf-quick-reports">
+            <i class="fa-solid fa-file-pdf"></i>
+            <span>View Reports</span>
+            <i class="fa-solid fa-arrow-right pf-quick-arrow"></i>
+          </a>
+          <a href="{{ url_for('dashboard.index') }}" class="pf-quick-btn pf-quick-dash">
+            <i class="fa-solid fa-gauge"></i>
+            <span>Dashboard</span>
+            <i class="fa-solid fa-arrow-right pf-quick-arrow"></i>
+          </a>
+          <a href="{{ url_for('auth.logout') }}" class="pf-quick-btn pf-quick-logout">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+            <i class="fa-solid fa-arrow-right pf-quick-arrow"></i>
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ============================
+         RIGHT COLUMN — Stats + Activity
+         ============================ -->
+    <div class="col-lg-8">
+
+      <!-- Account Statistics -->
+      <div class="pf-card pf-stats-card">
+        <div class="pf-card-header">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Account Statistics</span>
+        </div>
+        <div class="row g-3 pf-stats-grid">
+
+          <div class="col-6">
+            <div class="pf-stat-tile pf-tile-cyan">
+              <div class="pf-stat-tile-icon"><i class="fa-solid fa-globe"></i></div>
+              <div class="pf-stat-tile-num">{{ total_scans if total_scans is defined else 0 }}</div>
+              <div class="pf-stat-tile-label">Total Scans</div>
+              <div class="pf-stat-tile-glow"></div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="pf-stat-tile pf-tile-violet">
+              <div class="pf-stat-tile-icon"><i class="fa-solid fa-gauge-high"></i></div>
+              <div class="pf-stat-tile-num">{{ average_score if average_score is defined else 0 }}</div>
+              <div class="pf-stat-tile-label">Avg Security Score</div>
+              <div class="pf-stat-tile-glow"></div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="pf-stat-tile pf-tile-green">
+              <div class="pf-stat-tile-icon"><i class="fa-solid fa-shield-halved"></i></div>
+              <div class="pf-stat-tile-num">{{ low_risk if low_risk is defined else 0 }}</div>
+              <div class="pf-stat-tile-label">Low Risk Scans</div>
+              <div class="pf-stat-tile-glow"></div>
+            </div>
+          </div>
+
+          <div class="col-6">
+            <div class="pf-stat-tile pf-tile-rose">
+              <div class="pf-stat-tile-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+              <div class="pf-stat-tile-num">{{ high_risk if high_risk is defined else 0 }}</div>
+              <div class="pf-stat-tile-label">High Risk Scans</div>
+              <div class="pf-stat-tile-glow"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Recent Activity Timeline -->
+      <div class="pf-card pf-activity-card mt-4">
+        <div class="pf-card-header pf-card-header-split">
+          <div class="d-flex align-items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Recent Activity</span>
+          </div>
+          <span class="pf-live-badge"><span class="cs-dot"></span> LIVE</span>
+        </div>
+        
+
+          {% if recent_scans is defined and recent_scans %}
+<div class="pf-timeline">
+
+{% for scan in recent_scans %}
+
+<div class="pf-timeline-item">
+
+            <div class="pf-timeline-dot
+              {% if scan.risk_level == 'Low' %}pf-dot-green
+              {% elif scan.risk_level == 'Medium' %}pf-dot-amber
+              {% elif scan.risk_level == 'High' %}pf-dot-red
+              {% else %}pf-dot-purple{% endif %}">
+            </div>
+            <div class="pf-timeline-line"></div>
+            <div class="pf-timeline-card">
+              <div class="pf-timeline-top">
+                <div class="pf-timeline-site">
+                  <i class="fa-solid fa-globe"></i>
+                  <span class="mono">{{ scan.website.replace('https://','').replace('http://','').replace('www.','').rstrip('/') }}{ scan.website }}</span>
+                </div>
+                <span class="badge pf-risk-badge
+                  {% if scan.risk_level == 'Low' %}bg-success
+                  {% elif scan.risk_level == 'Medium' %}pf-badge-warning
+                  {% elif scan.risk_level == 'High' %}bg-danger
+                  {% else %}pf-badge-critical{% endif %}">
+                  {% if scan.risk_level == 'Low' %}<i class="fa-solid fa-circle-check me-1"></i>
+                  {% elif scan.risk_level == 'Medium' %}<i class="fa-solid fa-triangle-exclamation me-1"></i>
+                  {% elif scan.risk_level == 'High' %}<i class="fa-solid fa-fire me-1"></i>
+                  {% else %}<i class="fa-solid fa-skull-crossbones me-1"></i>{% endif %}
+                  {{ scan.risk_level }}
+                </span>
+              </div>
+              <div class="pf-timeline-bottom">
+                <div class="pf-timeline-score">
+                  <div class="pf-mini-bar">
+                    <span class="pf-mini-fill
+                      {% if scan.security_score >= 80 %}pf-fill-green
+                      {% elif scan.security_score >= 50 %}pf-fill-amber
+                      {% else %}pf-fill-red{% endif %}"
+                      style="width: {{ scan.security_score }}%;">
+                    </span>
+                  </div>
+                  <span class="mono pf-score-num">{{ scan.security_score }}<small>/100</small></span>
+                </div>
+                <span class="pf-timeline-date mono">
+                  <i class="fa-solid fa-calendar-days"></i>
+                  {{ scan.scan_date.strftime('%d %b %Y • %I:%M %p') }}
+                </span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
+        {% else %}
+        <div class="pf-activity-empty">
+          <i class="fa-solid fa-satellite-dish pf-empty-icon"></i>
+          <p>No recent scans found.</p>
+          <a href="{{ url_for('scanner.scan') }}" class="btn cs-btn-glow mt-2">
+            <i class="fa-solid fa-bolt me-2"></i>Start First Scan
+          </a>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="cs-footer">
+  <div class="container">
+    <div class="cs-footer-center">
+      <a class="navbar-brand cs-brand" href="{{ url_for('dashboard.index') }}">
+        <span class="cs-brand-icon"><i class="fa-solid fa-shield-halved"></i></span>
+        CyberShield <span class="cs-brand-accent">AI</span>
+      </a>
+      <p class="cs-footer-about">Developed by Aditya Narke</p>
+    </div>
+    <hr class="cs-footer-divider">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center cs-footer-bottom">
+      <p class="mb-0">© 2026 CyberShield AI</p>
+      <p class="mb-0"><i class="fa-solid fa-circle cs-status-dot" aria-hidden="true"></i> All systems operational</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
