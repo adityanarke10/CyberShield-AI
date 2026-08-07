@@ -23,6 +23,7 @@ def scan():
     technologies = None
     cookies = None
     security_score = None
+    scan = None
 
     if request.method == "POST":
 
@@ -62,6 +63,7 @@ def scan():
 
             db.session.add(history)
             db.session.commit()
+
             scan = history
 
         except Exception as e:
@@ -78,5 +80,5 @@ def scan():
         technologies=technologies,
         cookies=cookies,
         security_score=security_score,
-    scan = scan
+        scan=scan
     )

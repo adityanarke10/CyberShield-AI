@@ -55,10 +55,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link"href="{{ url_for('profile.profile_page') }}">Profile</a>
-                        <i class="fa-solid fa-user-shield me-1"></i> Profile
-                    </a>
-                </li>
+    <a class="nav-link" href="{{ url_for('profile.profile_page') }}">
+        <i class="fa-solid fa-user-shield me-1"></i>
+        Profile
+    </a>
+</li>
                 <li class="nav-item ms-lg-2">
                     <a class="btn btn-outline-cyan btn-sm px-3" href="{{ url_for('auth.logout') }}">
                         <i class="fa-solid fa-right-from-bracket me-1"></i> Logout
