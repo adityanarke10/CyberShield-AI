@@ -63,6 +63,9 @@ CyberShield AI is an intelligent cybersecurity platform developed using Python a
 - Requests
 - ReportLab
 
+🌐 Live Demo
+https://lnkd.in/dmNPBXvx
+
 ## Developer
 
 Aditya Narke
